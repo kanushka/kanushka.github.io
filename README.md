@@ -1,3 +1,1 @@
-# kanushka.github.io
-
-kanushka gayan online resume
+kanushka gayan's online resume
