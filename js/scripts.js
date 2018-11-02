@@ -4,6 +4,14 @@
 	// Page Loaded...
 	$(document).ready(function () {
 
+		// add console banner
+		let titleFont = "font-size:34px; font-weight:200; letter-spacing:0.02em; line-height:1.4em; font-family:helvetica,arial; color:#0072ff;";
+		let subTitleFont = "font-size:14px; font-weight:200; letter-spacing:0.02em; line-height:1.4em; font-family:helvetica,arial; color:rgba(0,0,0,0.9);";
+		console.log("%cKanushka Gayan %cCV", titleFont, subTitleFont);
+		console.log("%cHello, I’m Kanushka Gayan. I Have 1 years of experience in Full-Stack Web Development. I am worked on a variety of brands and with agencies both big and small.", subTitleFont);
+		console.log("%cWould you like to hire me. Then send email to kaushkanet@gmail.com", subTitleFont);
+		console.log = function () {}
+
 		/*==========  Tooltip  ==========*/
 		$('.tool-tip').tooltip();
 
