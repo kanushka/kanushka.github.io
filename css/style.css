@@ -102,11 +102,11 @@ a {
 	-ms-transition: .25s;
 	transition: .25s;
 	outline: none !important;
-	color: #7e50ff;
+	color: #2677c4;
 }
 
 a:hover {
-	color: #7e50ff;
+	color: #2677c4;
 }
 
 a:focus {
@@ -153,7 +153,7 @@ a:hover img {
 }
 
 .list-icons.purple>li>i {
-	color: #7e50ff;
+	color: #2677c4;
 }
 
 .bold-list {
