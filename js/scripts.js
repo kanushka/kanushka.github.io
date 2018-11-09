@@ -316,9 +316,6 @@
 				contactForm.find('.contact-message').val()
 			);
 
-			// remove server calling function
-			return;
-
 			// server api url
 			var action = 'https://kanushka-resume.000webhostapp.com/api/message';
 
