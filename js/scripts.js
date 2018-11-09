@@ -308,7 +308,13 @@
 		contactForm.find('.contact-loading').fadeOut();
 		if (validateEmail(contactForm.find('.contact-email').val()) && contactForm.find('.contact-email').val().length !== 0 && contactForm.find('.contact-name').val().length !== 0 && contactForm.find('.contact-message').val().length !== 0) {
 			contactForm.find('.contact-loading').fadeIn();
-			var action = contactForm.attr('action');
+
+			// local api url
+			// var action = 'http://localhost/kanushkaresume/resumeapis/message';
+
+			// server api url
+			var action = 'https://kanushka-resume.000webhostapp.com/api/message';
+
 			$.ajax({
 				type: "POST",
 				url: action,
@@ -321,6 +327,9 @@
 					contactForm.find('.contact-loading').fadeOut();
 					contactForm.find('.contact-success').find('.message').html('Success! Thanks for contacting us!');
 					contactForm.find('.contact-success').fadeIn();
+
+					// clear form
+					contactForm[0].reset();
 				},
 				error: function () {
 					contactForm.find('.contact-loading').fadeOut();
