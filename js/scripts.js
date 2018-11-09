@@ -309,8 +309,15 @@
 		if (validateEmail(contactForm.find('.contact-email').val()) && contactForm.find('.contact-email').val().length !== 0 && contactForm.find('.contact-name').val().length !== 0 && contactForm.find('.contact-message').val().length !== 0) {
 			contactForm.find('.contact-loading').fadeIn();
 
-			// local api url
-			// var action = 'http://localhost/kanushkaresume/resumeapis/message';
+			// send email
+			sendEmail(
+				contactForm.find('.contact-email').val(),
+				contactForm.find('.contact-name').val(),
+				contactForm.find('.contact-message').val()
+			);
+
+			// remove server calling function
+			return;
 
 			// server api url
 			var action = 'https://kanushka-resume.000webhostapp.com/api/message';
@@ -381,5 +388,16 @@
 		}
 	}
 	// google.maps.event.addDomListener(window, 'load', initialize_map);
+
+	// send email through smtpJS
+	// 7ff797af-a77a-4b3d-b431-d0f58a124bce
+	function sendEmail(email, name, message) {
+		Email.send(email,
+			"kanushkanet@gmail.com",
+			"Message to Kanushka Resume from " + name,
+			message, {
+				token: "7ff797af-a77a-4b3d-b431-d0f58a124bce"
+			});
+	}
 
 })(jQuery);
