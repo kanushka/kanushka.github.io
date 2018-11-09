@@ -301,7 +301,8 @@
 	}
 
 	/*==========  Contact Form  ==========*/
-	$('.contact-form').on('submit', function () {
+	$('.contact-form').on('submit', function (event) {
+		event.preventDefault();
 		var contactForm = $(this);
 		contactForm.find('.contact-error').fadeOut();
 		contactForm.find('.contact-success').fadeOut();
@@ -309,13 +310,27 @@
 		if (validateEmail(contactForm.find('.contact-email').val()) && contactForm.find('.contact-email').val().length !== 0 && contactForm.find('.contact-name').val().length !== 0 && contactForm.find('.contact-message').val().length !== 0) {
 			contactForm.find('.contact-loading').fadeIn();
 
-			// send email
-			sendEmail(
-				contactForm.find('.contact-email').val(),
-				contactForm.find('.contact-name').val(),
-				contactForm.find('.contact-message').val()
-			);
+			let name = contactForm.find('.contact-name').val();
+			let email = contactForm.find('.contact-email').val();
+			let message = contactForm.find('.contact-message').val();
 
+			// send email
+			Email.send(email,
+				"kanushkanet@gmail.com",
+				"#KanushkaResume from " + name,
+				message, {
+					token: "7ff797af-a77a-4b3d-b431-d0f58a124bce",
+					callback: function done(message) {
+						contactForm.find('.contact-loading').fadeOut();
+						contactForm.find('.contact-success').find('.message').html('Success! Thanks for contacting us!');
+						contactForm.find('.contact-success').fadeIn();
+
+						// clear form
+						contactForm[0].reset();
+					}
+				});
+
+			return;
 			// server api url
 			var action = 'https://kanushka-resume.000webhostapp.com/api/message';
 
@@ -385,16 +400,5 @@
 		}
 	}
 	// google.maps.event.addDomListener(window, 'load', initialize_map);
-
-	// send email through smtpJS
-	// 7ff797af-a77a-4b3d-b431-d0f58a124bce
-	function sendEmail(email, name, message) {
-		Email.send(email,
-			"kanushkanet@gmail.com",
-			"Message to Kanushka Resume from " + name,
-			message, {
-				token: "7ff797af-a77a-4b3d-b431-d0f58a124bce"
-			});
-	}
 
 })(jQuery);
