@@ -197,25 +197,29 @@
 			<section id="section2">
 				<div class="container">
 					<h2>About Me</h2>
-					<div class="row">
+					<div class="row" itemscope itemtype="http://schema.org/Person">
 						<div class="col-sm-3">
-							<img src="images/man02.png" alt="man" class="img-responsive section-img">
+							<img src="images/man02.png" alt="man" class="img-responsive section-img" itemprop="image">
 						</div> <!-- end .col-sm-3 -->
 						<div class="col-sm-9">
-							<h3 class="small-margin-bottom">Kanushka Gayan</h3>
-							<h5>Full-Stack Web Developer</h5>
-							<p>I am a software engineer with the professional experience and knowledge related to full stack web
+							<h3 class="small-margin-bottom" itemprop="name">Kanushka Gayan</h3>
+							<meta itemprop="honorificPrefix" content="Mr">
+							<h5 itemprop="jobTitle">Full-Stack Web Developer</h5>
+							<p itemprop="description">I am a software engineer with the professional experience and knowledge related to full stack web
 								development. A passionate individual, eager to learn new technologies in the constantly evolving environment
 								with the technological advancement. And I am a traveler who captures the beauty of the nature, life styles of
 								people with a different view.</p>
 							<p>Feel free to reach me through the below below Social media links at anytime.</p>
 							<!-- <div class="signature"><img src="images/signature.png" alt="signature" class="img-responsive"></div> -->
 							<ul class="list-unstyled text-uppercase">
-								<li><b>Date Of Birth:</b> 28 Dec 1993</li>
-								<li><b>Phone:</b> +94 71 879 4546</li>
-								<li><b>Email:</b> kanushkanet@gmail.com</li>
-								<li><b>Address:</b> 391A, Manampita, Meetiyagoda, Sri Lanka.</li>
+								<li><b>Date Of Birth:</b> <span itemprop="birthDate">28 Dec 1993</span></li>
+								<li><b>Phone:</b> <span itemprop="telephone">+94 71 879 4546</span></li>
+								<li><b>Email:</b> <span itemprop="email">kanushkanet@gmail.com</span></li>
+								<li><b>Address:</b> <span itemprop="homeLocation"> 391A, Manampita, Meetiyagoda, Sri Lanka.</span> </li>
 								<!-- <li><b>Website:</b> http://www.example.com</li> -->
+								<meta itemprop="gender" content="http://schema.org/Male">
+								<meta itemprop="nationality" content="Sri Lankan">
+								<meta itemprop="worksFor" content="Extrogene Software (Pvt) Ltd.">
 							</ul> <!-- end .list-unstyled -->
 							<div class="spacer"></div>
 							<h3>What I'm Doing</h3>
