@@ -322,40 +322,18 @@
 					token: "7ff797af-a77a-4b3d-b431-d0f58a124bce",
 					callback: function done(message) {
 						contactForm.find('.contact-loading').fadeOut();
-						contactForm.find('.contact-success').find('.message').html('Success! Thanks for contacting us!');
+						contactForm.find('.contact-success').find('.message').html('Success! Thanks for contacting me!');
 						contactForm.find('.contact-success').fadeIn();
 
 						// clear form
 						contactForm[0].reset();
+						// hide success message
+						setTimeout(function () {
+							contactForm.find('.contact-success').fadeOut();
+						}, 10000);
 					}
 				});
-
-			return;
-			// server api url
-			var action = 'https://kanushka-resume.000webhostapp.com/api/message';
-
-			$.ajax({
-				type: "POST",
-				url: action,
-				data: {
-					contact_name: contactForm.find('.contact-name').val(),
-					contact_email: contactForm.find('.contact-email').val(),
-					contact_message: contactForm.find('.contact-message').val()
-				},
-				success: function () {
-					contactForm.find('.contact-loading').fadeOut();
-					contactForm.find('.contact-success').find('.message').html('Success! Thanks for contacting us!');
-					contactForm.find('.contact-success').fadeIn();
-
-					// clear form
-					contactForm[0].reset();
-				},
-				error: function () {
-					contactForm.find('.contact-loading').fadeOut();
-					contactForm.find('.contact-error').find('.message').html('Sorry, an error occurred.');
-					contactForm.find('.contact-error').fadeIn();
-				}
-			});
+			//'Sorry, an error occurred.'
 		} else if (!validateEmail(contactForm.find('.contact-email').val()) && contactForm.find('.contact-email').val().length !== 0 && contactForm.find('.contact-name').val().length !== 0 && contactForm.find('.contact-message').val().length !== 0) {
 			contactForm.find('.contact-error').fadeOut();
 			contactForm.find('.contact-success').fadeOut();
