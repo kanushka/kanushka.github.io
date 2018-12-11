@@ -1,0 +1,463 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY resume-ontology "https://kanushka.github.io/resume-ontology#" >
+]>
+
+
+<rdf:RDF xmlns="https://kanushka.github.io/resume-ontology#"
+     xml:base="https://kanushka.github.io/resume-ontology"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:resume-ontology="https://kanushka.github.io/resume-ontology#">
+    <owl:Ontology rdf:about="https://kanushka.github.io/resume-ontology"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#employedIn -->
+
+    <owl:ObjectProperty rdf:about="&resume-ontology;employedIn">
+        <rdfs:range rdf:resource="&resume-ontology;organization"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#hasSkill -->
+
+    <owl:ObjectProperty rdf:about="&resume-ontology;hasSkill">
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+        <rdfs:range rdf:resource="&resume-ontology;skill"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#studiedIn -->
+
+    <owl:ObjectProperty rdf:about="&resume-ontology;studiedIn">
+        <rdfs:range rdf:resource="&resume-ontology;educationInstitue"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#address -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;address">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#birthName -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;birthName">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#birthday -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;birthday">
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#email -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;email">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#instituteLocation -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;instituteLocation">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;educationInstitue"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#instituteName -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;instituteName">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;educationInstitue"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#mobileNumber -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;mobileNumber">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#organizationName -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;organizationName">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;organization"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#sex -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;sex">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skillLevel -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;skillLevel">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;languageSkill"/>
+        <rdfs:domain rdf:resource="&resume-ontology;technicalSkill"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skillName -->
+
+    <owl:DatatypeProperty rdf:about="&resume-ontology;skillName">
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&resume-ontology;skill"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#School -->
+
+    <owl:Class rdf:about="&resume-ontology;School">
+        <rdfs:subClassOf rdf:resource="&resume-ontology;educationInstitue"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#University -->
+
+    <owl:Class rdf:about="&resume-ontology;University">
+        <rdfs:subClassOf rdf:resource="&resume-ontology;educationInstitue"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#educationInstitue -->
+
+    <owl:Class rdf:about="&resume-ontology;educationInstitue"/>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#languageSkill -->
+
+    <owl:Class rdf:about="&resume-ontology;languageSkill">
+        <rdfs:subClassOf rdf:resource="&resume-ontology;skill"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#organization -->
+
+    <owl:Class rdf:about="&resume-ontology;organization"/>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#person -->
+
+    <owl:Class rdf:about="&resume-ontology;person"/>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill -->
+
+    <owl:Class rdf:about="&resume-ontology;skill"/>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#softSkill -->
+
+    <owl:Class rdf:about="&resume-ontology;softSkill">
+        <rdfs:subClassOf rdf:resource="&resume-ontology;skill"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#technicalSkill -->
+
+    <owl:Class rdf:about="&resume-ontology;technicalSkill">
+        <rdfs:subClassOf rdf:resource="&resume-ontology;skill"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#organization-extrogene -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;organization-extrogene">
+        <rdf:type rdf:resource="&resume-ontology;organization"/>
+        <organizationName rdf:datatype="&xsd;string">Extrogene Software (Pvt) Ltd</organizationName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#person-gayan -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;person-gayan">
+        <rdf:type rdf:resource="&resume-ontology;person"/>
+        <address rdf:datatype="&xsd;string">&quot;Gayan&quot;,
+Manampita,
+Meetiyagoda,
+Sri Lanka</address>
+        <mobileNumber rdf:datatype="&xsd;string">(+94)71 879 4546</mobileNumber>
+        <birthday rdf:datatype="&xsd;dateTime">1993-12-28T00:00:00Z</birthday>
+        <birthName rdf:datatype="&xsd;string">Kanushka Gayan</birthName>
+        <email rdf:datatype="&xsd;string">kanushkanet@gmail.com</email>
+        <sex rdf:datatype="&xsd;string">male</sex>
+        <employedIn rdf:resource="&resume-ontology;organization-extrogene"/>
+        <studiedIn rdf:resource="&resume-ontology;school-kmv"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-communication"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-css"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-html"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-java"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-javascript"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-lang-eng"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-lang-sin"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-nodejs"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-php"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-problem-solving"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-reactjs"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-responsibility"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-self-motivation"/>
+        <hasSkill rdf:resource="&resume-ontology;skill-teamwork"/>
+        <studiedIn rdf:resource="&resume-ontology;uniersity-uok"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#school-kmv -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;school-kmv">
+        <rdf:type rdf:resource="&resume-ontology;School"/>
+        <instituteName rdf:datatype="&xsd;string">G/P.De.S.Kularathne M.V.</instituteName>
+        <instituteLocation rdf:datatype="&xsd;string">Paniyana,
+Ambalangoda,
+Sri Lanka</instituteLocation>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-communication -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-communication">
+        <rdf:type rdf:resource="&resume-ontology;softSkill"/>
+        <skillName rdf:datatype="&xsd;string">Interpersonal Communication</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-css -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-css">
+        <rdf:type rdf:resource="&resume-ontology;technicalSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">85%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">CSS</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-html -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-html">
+        <rdf:type rdf:resource="&resume-ontology;technicalSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">85%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">HTML</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-java -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-java">
+        <rdf:type rdf:resource="&resume-ontology;technicalSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">50%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">JAVA</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-javascript -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-javascript">
+        <rdf:type rdf:resource="&resume-ontology;technicalSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">85%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">Javascript</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-lang-eng -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-lang-eng">
+        <rdf:type rdf:resource="&resume-ontology;languageSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">75%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">English</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-lang-sin -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-lang-sin">
+        <rdf:type rdf:resource="&resume-ontology;languageSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">99%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">Sinhala</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-nodejs -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-nodejs">
+        <rdf:type rdf:resource="&resume-ontology;technicalSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">60%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">Node JS</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-php -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-php">
+        <rdf:type rdf:resource="&resume-ontology;technicalSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">85%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">PHP</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-problem-solving -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-problem-solving">
+        <rdf:type rdf:resource="&resume-ontology;softSkill"/>
+        <skillName rdf:datatype="&xsd;string">Problem Solving</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-reactjs -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-reactjs">
+        <rdf:type rdf:resource="&resume-ontology;technicalSkill"/>
+        <skillLevel rdf:datatype="&xsd;string">60%</skillLevel>
+        <skillName rdf:datatype="&xsd;string">React JS</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-responsibility -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-responsibility">
+        <rdf:type rdf:resource="&resume-ontology;softSkill"/>
+        <skillName rdf:datatype="&xsd;string">Responsibility</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-self-motivation -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-self-motivation">
+        <rdf:type rdf:resource="&resume-ontology;softSkill"/>
+        <skillName rdf:datatype="&xsd;string">Self Motivation</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#skill-teamwork -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;skill-teamwork">
+        <rdf:type rdf:resource="&resume-ontology;softSkill"/>
+        <skillName rdf:datatype="&xsd;string">Team Work</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-ontology#uniersity-uok -->
+
+    <owl:NamedIndividual rdf:about="&resume-ontology;uniersity-uok">
+        <rdf:type rdf:resource="&resume-ontology;University"/>
+        <instituteLocation rdf:datatype="&xsd;string">Dalugama,
+Kelaniya,
+Sri Lanka</instituteLocation>
+        <instituteName rdf:datatype="&xsd;string">University of Kelaniya</instituteName>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
