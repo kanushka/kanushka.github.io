@@ -1,0 +1,810 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="https://kanushka.github.io/resume-gayan-ontology.owl#"
+     xml:base="https://kanushka.github.io/resume-gayan-ontology.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#employedIn -->
+
+    <owl:ObjectProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#employedIn">
+        <rdfs:label>employedIn</rdfs:label>
+        <rdfs:comment>The company where the person is/was employed.</rdfs:comment>
+        <rdfs:range rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Company"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#followedCourse -->
+
+    <owl:ObjectProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#followedCourse">
+        <rdfs:label>followedCourse</rdfs:label>
+        <rdfs:comment>The courses person followed.</rdfs:comment>
+        <rdfs:range rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Course"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#hasEducation -->
+
+    <owl:ObjectProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#hasEducation">
+        <rdfs:label>hasEducation</rdfs:label>
+        <rdfs:range rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#hasSkill -->
+
+    <owl:ObjectProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#hasSkill">
+        <rdfs:label>hasSkill</rdfs:label>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+        <rdfs:range rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Skill"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#hasWorkHistory -->
+
+    <owl:ObjectProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#hasWorkHistory">
+        <rdfs:label>hasWorkHistory</rdfs:label>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+        <rdfs:range rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#organizedBy -->
+
+    <owl:ObjectProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#organizedBy">
+        <rdfs:label>organizedBy</rdfs:label>
+        <rdfs:comment>Organization that organized courses and/or provided certification.</rdfs:comment>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Course"/>
+        <rdfs:range rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#EducationalOrg"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#studiedIn -->
+
+    <owl:ObjectProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#studiedIn">
+        <rdfs:label>studiedIn</rdfs:label>
+        <rdfs:comment>Educational organization where person studied.</rdfs:comment>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+        <rdfs:range rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#EducationalOrg"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#address -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#address">
+        <rdfs:label>address</rdfs:label>
+        <rdfs:comment>Address of the person</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#birthday -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#birthday">
+        <rdfs:label>birthday
+</rdfs:label>
+        <rdfs:comment>Date of birth of the person.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#careerLevel -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#careerLevel">
+        <rdfs:label>careerLevel</rdfs:label>
+        <rdfs:comment>Career level for the position in company.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#courseDescription -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#courseDescription">
+        <rdfs:label>courseDescription</rdfs:label>
+        <rdfs:comment>Description of the course / certification.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Course"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#courseFinishDate -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#courseFinishDate">
+        <rdfs:label>courseFinishDate</rdfs:label>
+        <rdfs:comment>Date when course was finished / certification acquired.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Course"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#courseStartDate -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#courseStartDate">
+        <rdfs:label>courseStartDate</rdfs:label>
+        <rdfs:comment>Start date of the course taken.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Course"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#courseTitle -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#courseTitle">
+        <rdfs:label>courseTitle</rdfs:label>
+        <rdfs:comment>Title of the course taken or certification acquired.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Course"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#eduDegree -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#eduDegree">
+        <rdfs:label>eduDegree</rdfs:label>
+        <rdfs:comment>Title of the degree</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#eduDescription -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#eduDescription">
+        <rdfs:label>eduDescription</rdfs:label>
+        <rdfs:comment>Description of the education info.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#eduGradDate -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#eduGradDate">
+        <rdfs:label>eduGradDate</rdfs:label>
+        <rdfs:comment>Education end (graducation) date</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#eduStartDate -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#eduStartDate">
+        <rdfs:label>eduStartDate</rdfs:label>
+        <rdfs:comment>Education start date</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#email -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#email">
+        <rdfs:label>email</rdfs:label>
+        <rdfs:comment>Email of the person</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#gender -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#gender">
+        <rdfs:label>gender</rdfs:label>
+        <rdfs:comment>Gender property (man/woman)</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#hasNationality -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#hasNationality">
+        <rdfs:label>hasNationality</rdfs:label>
+        <rdfs:comment>Person&apos;s nationality.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#isCurrent -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#isCurrent">
+        <rdfs:label>isCurrent</rdfs:label>
+        <rdfs:comment>Indicates if this is a current workplace.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#jobDescription -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#jobDescription">
+        <rdfs:label>jobDescription</rdfs:label>
+        <rdfs:comment>Description of the job in company.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#jobTitle -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#jobTitle">
+        <rdfs:label>jobTitle</rdfs:label>
+        <rdfs:comment>Title in the company.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#jobType -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#jobType">
+        <rdfs:label>jobType</rdfs:label>
+        <rdfs:comment>Type of the job: employee / contractor / intern</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#lngSkillLevelReading -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#lngSkillLevelReading">
+        <rdfs:comment>Reading level of language skill. (0..5)</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;int"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#LanguageSkill"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#lngSkillLevelWritten -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#lngSkillLevelWritten">
+        <rdfs:label>lngSkillLevelWritten</rdfs:label>
+        <rdfs:comment>Level of writing skills for language. (0..5)</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;int"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#LanguageSkill"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#name -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#name">
+        <rdfs:label>name</rdfs:label>
+        <rdfs:comment>Name of the person</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#orgName -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#orgName">
+        <rdfs:label>orgName</rdfs:label>
+        <rdfs:comment>Name of the Organization.</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Organization"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#skillName -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#skillName">
+        <rdfs:label>skillName</rdfs:label>
+        <rdfs:comment>Name of the skill</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Skill"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techSkillLevel -->
+
+    <owl:DatatypeProperty rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techSkillLevel">
+        <rdfs:label>techSkillLevel</rdfs:label>
+        <rdfs:comment>Level of technical skills (0..100)</rdfs:comment>
+        <rdfs:range rdf:resource="&xsd;int"/>
+        <rdfs:domain rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#CVEntry -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#CVEntry">
+        <rdfs:label>CVEntry</rdfs:label>
+        <rdfs:comment>Single entry of CV information. Type of CV information specified in subclasses</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#Company -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#Company">
+        <rdfs:label>Company</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Organization"/>
+        <rdfs:comment>A class for company information.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#Course -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#Course">
+        <rdfs:label>Course</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#CVEntry"/>
+        <rdfs:comment>CV entry for courses taken</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#Education -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#Education">
+        <rdfs:label>Education</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#CVEntry"/>
+        <rdfs:comment>CV entry for education</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#EducationalOrg -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#EducationalOrg">
+        <rdfs:label>EducationalOrg</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Organization"/>
+        <rdfs:comment>Educational organization (university, ...)</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#LanguageSkill -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#LanguageSkill">
+        <rdfs:label>LanguageSkill</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Skill"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#Organization -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#Organization">
+        <rdfs:label>Organization</rdfs:label>
+        <rdfs:comment>General class for organizations</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#Person -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#Person">
+        <rdfs:label>Person</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#Skill -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#Skill">
+        <rdfs:label>Skill</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#CVEntry"/>
+        <rdfs:comment>CV entry for description of skills</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill">
+        <rdfs:label>SoftSkill</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Skill"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill">
+        <rdfs:label>TechnicalSkill</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Skill"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory -->
+
+    <owl:Class rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory">
+        <rdfs:label>WorkHistory</rdfs:label>
+        <rdfs:subClassOf rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#CVEntry"/>
+        <rdfs:comment>CV entry for work history</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#company-extrogene -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#company-extrogene">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Company"/>
+        <orgName rdf:datatype="&xsd;string">Extrogene Software (Pvt) Ltd</orgName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#course-java-se -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#course-java-se">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Course"/>
+        <courseStartDate rdf:datatype="&xsd;dateTime">2015-09-01T08:00:00Z</courseStartDate>
+        <courseFinishDate rdf:datatype="&xsd;dateTime">2017-12-21T08:00:00Z</courseFinishDate>
+        <courseTitle rdf:datatype="&xsd;string">Oracle Certified Professional, Java SE Programmer</courseTitle>
+        <organizedBy rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-ijse"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#education-kmv -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#education-kmv">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+        <eduStartDate rdf:datatype="&xsd;dateTime">2000-02-01T08:00:00Z</eduStartDate>
+        <eduGradDate rdf:datatype="&xsd;dateTime">2012-12-01T08:00:00Z</eduGradDate>
+        <eduDescription rdf:datatype="&xsd;string">GCE Advance Level
+Combine Maths - A
+Physics - B
+Chemistry - B</eduDescription>
+        <studiedIn rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-kularathne"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#education-uok -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#education-uok">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Education"/>
+        <eduStartDate rdf:datatype="&xsd;dateTime">2014-02-02T08:00:00Z</eduStartDate>
+        <eduGradDate rdf:datatype="&xsd;dateTime">2019-02-02T08:00:00Z</eduGradDate>
+        <eduDegree rdf:datatype="&xsd;string">BSc. (Hons) in Software Engineering</eduDegree>
+        <studiedIn rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-uok"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-ijse -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-ijse">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#EducationalOrg"/>
+        <orgName rdf:datatype="&xsd;string">IJSE - Institute of Software Engineering</orgName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-kularathne -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-kularathne">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#EducationalOrg"/>
+        <orgName rdf:datatype="&xsd;string">G/P.De.S.Kularathne M.V.</orgName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-uok -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#educationalorg-uok">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#EducationalOrg"/>
+        <orgName rdf:datatype="&xsd;string">University of Kelaniya</orgName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#lngskill-eng -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#lngskill-eng">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#LanguageSkill"/>
+        <lngSkillLevelWritten rdf:datatype="&xsd;int">4</lngSkillLevelWritten>
+        <lngSkillLevelReading rdf:datatype="&xsd;int">5</lngSkillLevelReading>
+        <skillName rdf:datatype="&xsd;string">English</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#lngskill-sin -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#lngskill-sin">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#LanguageSkill"/>
+        <lngSkillLevelWritten rdf:datatype="&xsd;int">5</lngSkillLevelWritten>
+        <lngSkillLevelReading rdf:datatype="&xsd;int">5</lngSkillLevelReading>
+        <skillName rdf:datatype="&xsd;string">Sinhala</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#person-gayan -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#person-gayan">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#Person"/>
+        <birthday rdf:datatype="&xsd;dateTime">1993-12-28T00:00:00Z</birthday>
+        <address rdf:datatype="&xsd;string">391A, 
+Manampita,
+Meetiyagoda,
+Sri Lanka.</address>
+        <name rdf:datatype="&xsd;string">Kanushka Gayan</name>
+        <gender rdf:datatype="&xsd;string">Male</gender>
+        <hasNationality rdf:datatype="&xsd;string">Sri Lankan</hasNationality>
+        <email rdf:datatype="&xsd;string">kanushkanet@gmail.com</email>
+        <followedCourse rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#course-java-se"/>
+        <hasEducation rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#education-kmv"/>
+        <hasEducation rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#education-uok"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#lngskill-eng"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#lngskill-sin"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-communication"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-problem-solving"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-responsibility"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-self-motivation"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-teamwork"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-css"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-html"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-java"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-javascript"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-nodejs"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-php"/>
+        <hasSkill rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-reactjs"/>
+        <hasWorkHistory rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#work-extrogene-intern"/>
+        <hasWorkHistory rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#work-extrogene-visiting"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#softskill-communication -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-communication">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill"/>
+        <skillName rdf:datatype="&xsd;string">Interpersonal Communication</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#softskill-problem-solving -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-problem-solving">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill"/>
+        <skillName rdf:datatype="&xsd;string">Problem Solving</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#softskill-responsibility -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-responsibility">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill"/>
+        <skillName rdf:datatype="&xsd;string">Responsibility</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#softskill-self-motivation -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-self-motivation">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill"/>
+        <skillName rdf:datatype="&xsd;string">Self Motivation</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#softskill-teamwork -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#softskill-teamwork">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill"/>
+        <skillName rdf:datatype="&xsd;string">Team Work</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techskill-css -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-css">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        <techSkillLevel rdf:datatype="&xsd;int">85</techSkillLevel>
+        <skillName rdf:datatype="&xsd;string">CSS</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techskill-html -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-html">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        <techSkillLevel rdf:datatype="&xsd;int">85</techSkillLevel>
+        <skillName rdf:datatype="&xsd;string">HTML</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techskill-java -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-java">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        <techSkillLevel rdf:datatype="&xsd;int">50</techSkillLevel>
+        <skillName rdf:datatype="&xsd;string">JAVA</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techskill-javascript -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-javascript">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        <techSkillLevel rdf:datatype="&xsd;int">85</techSkillLevel>
+        <skillName rdf:datatype="&xsd;string">Javascript</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techskill-nodejs -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-nodejs">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        <techSkillLevel rdf:datatype="&xsd;int">60</techSkillLevel>
+        <skillName rdf:datatype="&xsd;string">Node js</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techskill-php -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-php">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        <techSkillLevel rdf:datatype="&xsd;int">85</techSkillLevel>
+        <skillName rdf:datatype="&xsd;string">PHP</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#techskill-reactjs -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#techskill-reactjs">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        <techSkillLevel rdf:datatype="&xsd;int">60</techSkillLevel>
+        <skillName rdf:datatype="&xsd;string">React js</skillName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#work-extrogene-intern -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#work-extrogene-intern">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+        <jobType rdf:datatype="&xsd;string">Intern</jobType>
+        <jobTitle rdf:datatype="&xsd;string">Software Engineer</jobTitle>
+        <isCurrent rdf:datatype="&xsd;boolean">false</isCurrent>
+        <employedIn rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#company-extrogene"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://kanushka.github.io/resume-gayan-ontology.owl#work-extrogene-visiting -->
+
+    <owl:NamedIndividual rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#work-extrogene-visiting">
+        <rdf:type rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#WorkHistory"/>
+        <jobType rdf:datatype="&xsd;string">Permement</jobType>
+        <jobTitle rdf:datatype="&xsd;string">Software Engineer</jobTitle>
+        <isCurrent rdf:datatype="&xsd;boolean">true</isCurrent>
+        <employedIn rdf:resource="https://kanushka.github.io/resume-gayan-ontology.owl#company-extrogene"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#LanguageSkill"/>
+            <rdf:Description rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#SoftSkill"/>
+            <rdf:Description rdf:about="https://kanushka.github.io/resume-gayan-ontology.owl#TechnicalSkill"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
