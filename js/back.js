@@ -457,7 +457,7 @@ Tetris.prototype.newTetromino = function () {
 
 var width = window.innerWidth,
     boardDiv = 20 * Math.round(window.innerWidth / 20),
-    boards = 8,
+    boards = Math.round(window.innerWidth/256) + 1,
     bWidth = boardDiv / boards,
     tetrisInstances = [];
 
