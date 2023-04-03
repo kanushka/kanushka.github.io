@@ -1,99 +1,122 @@
+body {
+    background: #23201f;
+    overflow: hidden;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .web {
-  background-color: rgb(54, 48, 48);
-  height: 100%;
+    background-color: #23201f;
+    height: 100%;
 }
 
 h1,
 h4,
 h6 {
-  color: #d9d9d9;
-  font-family: "Courier Prime", monospace;
+    color: #d9d9d9;
+    font-family: "Courier Prime", monospace;
 }
 
 h1 {
-  font-family: "Major Mono Display", monospace !important;
-  font-weight: bolder;
+    font-family: "Major Mono Display", monospace !important;
+    font-weight: bolder;
+    z-index: 100;
 }
 
 p {
-  color: #a6a6a6;
-  font-family: "Inconsolata", monospace;
+    color: #a6a6a6;
+    font-family: "Inconsolata", monospace;
 }
 
 .full-height {
-  height: 90vh !important;
+    height: 90vh !important;
 }
 
 .social-icon {
-  width: 32px;
-  height: 32px;
-  transform: translate(0px, 0px) rotate(0deg);
-  margin-right: 15px;
-  cursor: pointer;
+    width: 32px;
+    height: 32px;
+    transform: translate(0px, 0px) rotate(0deg);
+    margin-right: 15px;
+    cursor: pointer;
+    z-index: 100;
 }
 
+svg {
+  fill: #8f8f8f;
+}
+
+svg:hover {
+  fill: white;
+}
+
+
 .profile-image-cover {
-  width: 316.696px;
-  height: 316.696px;
-  transform: translate(0px, 0px) rotate(0deg);
+    width: 316.696px;
+    height: 316.696px;
+    transform: translate(0px, 0px) rotate(0deg);
 }
 
 .profile-image {
-  object-fit: fill;
+    object-fit: fill;
+    width: inherit;
 }
 
 .mobile-profile-image-cover {
-  width: 316.696px;
-  height: 316.696px;
-  transform: translate(0px, 0px) rotate(0deg);
+    width: 316.696px;
+    height: 316.696px;
+    transform: translate(0px, 0px) rotate(0deg);
 }
 
 .mobile-profile-image {
-  object-fit: fill;
-  width: 300px;
+    object-fit: fill;
+    width: 300px;
 }
 
 @media screen and (max-width: 600px) {
-  h1,
-  h4,
-  h6,
-  p {
-    text-align: center;
-  }
+    h1,
+    h4,
+    h6,
+    p {
+        text-align: center;
+    }
 
-  h4 {
-    font-size: 1.2rem;
-  }
+    h4 {
+        font-size: 1.2rem;
+    }
 
-  h4 {
-    font-size: 1.2rem;
-  }
+    h4 {
+        font-size: 1.2rem;
+    }
 
-  p {
-    margin-left: 10vw;
-    margin-right: 10vw;
-  }
+    p {
+        margin-left: 10vw;
+        margin-right: 10vw;
+    }
 
-  .profile-contents {
-    margin-left: 5vw;
-    margin-right: 5vw;
-    display: flex;
-    align-items: center;
-  }
+    .profile-contents {
+        margin-left: 5vw;
+        margin-right: 5vw;
+        display: flex;
+        align-items: center;
+    }
 
-  .mobile-profile-image {
-    object-fit: fill;
-    width: 200px;
-  }
+    .mobile-profile-image {
+        object-fit: fill;
+        width: 200px;
+    }
 
-  .social-links {
-    display: flex;
-    justify-content: center;
-  }
+    .social-links {
+        display: flex;
+        justify-content: center;
+    }
 
-  .social-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-  }
+    .social-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
 }
