@@ -27,7 +27,7 @@
     <meta property="twitter:image" content="https://kanushka.com/images/meta-image.png">
     <meta name="twitter:creator" content="@KanushkaTwi">
 
-    <meta name="theme-color" content="#1B2BC4">
+    <meta name="theme-color" content="#FFFFFF">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,8 +59,8 @@
     <style>
         /* The whole site is two colors. Everything else is one of them on the other. */
         :root {
-            --ink: #1B2BC4;
-            --paper: #EFF1FF;
+            --ink: #000000;
+            --paper: #FFFFFF;
             --fg: var(--ink);
             --bg: var(--paper);
             --gutter: clamp(16px, 4vw, 48px);
@@ -170,6 +170,9 @@
             filter: url(#duotone);
             user-select: none;
             -webkit-user-drag: none;
+            /* The avatar stays black on white in both modes; in dark mode it sits on a white disc. */
+            background: var(--paper);
+            border-radius: 50%;
             transform-origin: 50% 90%;
         }
         .avatar:hover { animation: nod .6s ease; }
@@ -195,6 +198,32 @@
             line-height: 1.35;
             font-variation-settings: "opsz" 24;
         }
+
+        /* Game link: the ball is the game's own two-world ball, and it rolls on hover */
+        .game {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 28px;
+            padding: 10px 22px 10px 10px;
+            border: 2px solid var(--fg);
+            border-radius: 999px;
+            text-decoration: none;
+            transition: background-color .2s ease, color .2s ease;
+        }
+        .game strong { display: block; font-weight: 700; line-height: 1.2; }
+        .game small { display: block; font-size: .875rem; }
+        .game .ball {
+            flex: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--fg);
+            background: linear-gradient(180deg, var(--bg) 50%, var(--fg) 50%);
+            transition: transform .6s cubic-bezier(.6, 0, .2, 1);
+        }
+        .game:hover { background: var(--fg); color: var(--bg); }
+        .game:hover .ball { border-color: var(--bg); background: linear-gradient(180deg, var(--bg) 50%, var(--fg) 50%); transform: rotate(180deg); }
 
         /* Contacts */
         .contacts h2 {
@@ -304,9 +333,9 @@
         <filter id="duotone" color-interpolation-filters="sRGB">
             <feColorMatrix type="matrix" values=".33 .33 .33 0 0  .33 .33 .33 0 0  .33 .33 .33 0 0  0 0 0 1 0" />
             <feComponentTransfer>
-                <feFuncR id="dtR" type="discrete" tableValues="0.106 0.937" />
-                <feFuncG id="dtG" type="discrete" tableValues="0.169 0.945" />
-                <feFuncB id="dtB" type="discrete" tableValues="0.769 1" />
+                <feFuncR id="dtR" type="discrete" tableValues="0 1" />
+                <feFuncG id="dtG" type="discrete" tableValues="0 1" />
+                <feFuncB id="dtB" type="discrete" tableValues="0 1" />
             </feComponentTransfer>
         </filter>
     </svg>
@@ -323,7 +352,14 @@
             <section class="who">
                 <img class="avatar" src="images/kanushka-smile.png" alt="Cartoon portrait of Kanushka" width="168" height="168" draggable="false">
                 <h1><span>Kanushka</span><span>Gayan</span></h1>
-                <p class="intro">Software engineer. I build websites and mobile apps, and spend my spare hours with machine learning.</p>
+                <p class="intro">Software engineer. I learn by day, and build things that make life easier along the way.</p>
+                <a class="game" href="flip-ball/">
+                    <span class="ball" aria-hidden="true"></span>
+                    <span>
+                        <strong>Play Mirrorline</strong>
+                        <small>A black and white gravity game I made</small>
+                    </span>
+                </a>
             </section>
 
             <section class="contacts" aria-labelledby="contact-title">
@@ -374,13 +410,6 @@
                             <span class="handle">kanushkanet</span>
                         </a>
                     </li>
-                    <li>
-                        <a class="row" href="kanushka_gayan_cv.pdf" target="_blank" rel="noopener">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
-                            <span class="name">CV</span>
-                            <span class="handle">PDF</span>
-                        </a>
-                    </li>
                 </ul>
             </section>
         </main>
@@ -399,29 +428,20 @@
                 return { fg: cs.getPropertyValue('--fg').trim(), bg: cs.getPropertyValue('--bg').trim() };
             }
 
-            function hexToUnit(hex) {
-                var n = parseInt(hex.replace('#', ''), 16);
-                return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255].map(function (v) { return v.toFixed(3); });
-            }
-
-            // Dark shades of the avatar take the foreground color, light shades the background.
-            function paintAvatar() {
-                var c = colors(), a = hexToUnit(c.fg), b = hexToUnit(c.bg);
-                ['dtR', 'dtG', 'dtB'].forEach(function (id, i) {
-                    document.getElementById(id).setAttribute('tableValues', a[i] + ' ' + b[i]);
-                });
+            function syncThemeColor() {
+                var c = colors();
                 var meta = document.querySelector('meta[name="theme-color"]');
                 if (meta) meta.setAttribute('content', c.bg);
             }
 
             // Swap the two colors
             document.querySelector('.swap').addEventListener('click', function () {
-                var dark = colors().bg.toUpperCase() === '#1B2BC4';
+                var dark = colors().bg.toUpperCase() === '#000000';
                 var next = dark ? 'light' : 'dark';
                 root.dataset.theme = next;
                 root.toggleAttribute('data-swapped');
                 try { localStorage.setItem('theme', next); } catch (e) {}
-                paintAvatar();
+                syncThemeColor();
                 draw();
             });
 
@@ -489,9 +509,9 @@
             window.addEventListener('pointerdown', function (e) { move(e.clientX, e.clientY); }, { passive: true });
             document.addEventListener('pointerleave', function () { move(-9999, -9999); px = py = -9999; draw(); });
             window.addEventListener('resize', resize);
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { paintAvatar(); draw(); });
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { syncThemeColor(); draw(); });
 
-            paintAvatar();
+            syncThemeColor();
             resize();
         })();
     </script>
