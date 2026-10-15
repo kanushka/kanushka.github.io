@@ -634,43 +634,7 @@ async function start() {
     });
     hotspot("dog", "pet the dog", dogBed);
 
-    // ------------------------------------------------ bookshelf -> projects
-
-    const shelf = new THREE.Group();
-    shelf.position.set(-3.55, 0, 1.35);
-    room.add(shelf);
-    const shelfM = mat(C.cream);
-    box(0.8, 3.2, 0.08, shelfM, [0, 1.6, -1.1], shelf);
-    box(0.8, 3.2, 0.08, shelfM, [0, 1.6, 1.1], shelf);
-    box(0.06, 3.2, 2.2, mat(0xe9dcc6), [-0.37, 1.6, 0], shelf);
     const bookColors = [0x2f4a6d, C.teal, C.lamp, C.slate, 0x5f7d4f, C.orange, 0x8b3a3a, 0xd9b45a, 0x3f4656, 0x4f8fa8];
-    for (let s = 0; s < 4; s++) {
-        const y = 0.06 + s * 0.95;
-        box(0.8, 0.08, 2.2, shelfM, [0, y, 0], shelf);
-        if (s === 3) continue;
-        let z = -1.0;
-        let n = 0;
-        while (z < 0.95) {
-            const w = 0.09 + rand() * 0.08;
-            const hgt = 0.5 + rand() * 0.28;
-            if (z + w > 1.0) break;
-            const col = bookColors[Math.floor(rand() * bookColors.length)];
-            const b = box(0.55 + rand() * 0.1, hgt, w, col, [0.02, y + 0.04 + hgt / 2, z + w / 2], shelf, 0.015);
-            if (n === 6 && s === 1) { b.rotation.x = -0.35; b.position.z += 0.09; b.position.y -= 0.03; z += 0.12; }
-            z += w + 0.01;
-            n++;
-            if (s === 0 && n === 7) z += 0.5; // a gap for the little plant
-        }
-    }
-    box(0.8, 0.08, 2.2, shelfM, [0, 3.2, 0], shelf);
-    // things on top
-    cyl(0.16, 0.13, 0.28, C.terracotta, [0, 3.38, 0.6], shelf);
-    for (let i = 0; i < 6; i++) {
-        const vine = sphere(0.07, i % 2 ? C.leaf : C.leafDark, [0.2 + Math.min(i, 2) * 0.08, 3.42 - i * 0.14, 0.62 + Math.sin(i * 2) * 0.05], shelf, 8);
-        vine.scale.set(0.7, 1, 1.2);
-    }
-    sphere(0.16, C.leaf, [0, 3.58, 0.6], shelf, 10);
-    hotspot("projects", "my projects", shelf);
 
     // ------------------------------------------------ corkboard -> cv
 
@@ -736,13 +700,29 @@ async function start() {
     note(0.78, -0.35, C.mint, -0.12);
     hotspot("cv", "my cv", board);
 
-    // ------------------------------------------------ record player (on the bookshelf) -> music
+    // ------------------------------------------------ small cupboard + record player -> music
+
+    const cupboard = new THREE.Group();
+    cupboard.position.set(-3.6, 0, -1.4);
+    room.add(cupboard);
+    const cupM = mat(C.wood);
+    box(0.7, 0.95, 1.5, cupM, [0, 0.52, 0], cupboard, 0.03);
+    for (const z of [-0.36, 0.36]) {
+        box(0.02, 0.75, 0.68, C.woodDark, [0.355, 0.5, z], cupboard);
+        box(0.04, 0.16, 0.03, C.cream, [0.38, 0.55, z + (z < 0 ? 0.26 : -0.26)], cupboard);
+    }
+    for (const z of [-0.6, 0.6]) cyl(0.035, 0.03, 0.08, C.charcoal, [0.2, 0.04, z], cupboard, 8);
+    // a few records leaning next to the player
+    for (let i = 0; i < 3; i++) {
+        const sleeve = box(0.36, 0.36, 0.02, [C.orange, C.teal, 0x5f7d4f][i], [0.0, 1.17, 0.5 + i * 0.03], cupboard);
+        sleeve.rotation.x = -0.12;
+    }
 
     const player = new THREE.Group();
-    player.position.set(0.02, 3.24, -0.5);
+    player.position.set(0.0, 1.0, -0.15);
     player.rotation.y = Math.PI / 2;
-    player.scale.setScalar(0.75);
-    shelf.add(player);
+    player.scale.setScalar(0.85);
+    cupboard.add(player);
     box(1.05, 0.14, 0.75, 0x3a3f4d, [0, 0.07, 0], player, 0.03);
     cyl(0.3, 0.3, 0.02, C.charcoal, [-0.12, 0.15, 0], player, 32);
     const disc = new THREE.Group();
@@ -777,38 +757,34 @@ async function start() {
     for (const x of [-0.7, 0.7]) cyl(0.04, 0.03, 0.1, C.charcoal, [x, 0.05, 0.3], cabinet, 8);
 
     const tvGroup = new THREE.Group();
-    tvGroup.position.set(-0.1, 1.1, 0.0);
+    tvGroup.position.set(0, 1.1, -0.1);
     cabinet.add(tvGroup);
-    box(1.1, 0.85, 0.75, 0x3b4150, [0, 0.43, -0.02], tvGroup, 0.08);
-    box(0.95, 0.7, 0.04, 0x15181f, [0, 0.45, 0.35], tvGroup, 0.03);
-    const tvScreen = new THREE.Mesh(new THREE.PlaneGeometry(0.84, 0.62), new THREE.MeshBasicMaterial({ map: tvTex, toneMapped: false }));
-    tvScreen.position.set(0, 0.45, 0.372);
+    // slim flat screen on a low stand
+    box(0.5, 0.025, 0.24, 0x1b1e26, [0, 0.0125, 0.02], tvGroup, 0.01);
+    box(0.08, 0.14, 0.05, 0x1b1e26, [0, 0.08, -0.02], tvGroup);
+    box(1.56, 0.9, 0.05, 0x111318, [0, 0.62, 0], tvGroup, 0.015);
+    const tvScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 0.84), new THREE.MeshBasicMaterial({ map: tvTex, toneMapped: false }));
+    tvScreen.position.set(0, 0.625, 0.027);
     tvGroup.add(tvScreen);
-    const knobs = [[0.47, 0.75], [0.47, 0.62]];
-    knobs.forEach(([x, y]) => cyl(0.03, 0.03, 0.03, C.cream, [x, y, 0.36], tvGroup, 10).rotation.x = Math.PI / 2);
-    const antenna = (r) => {
-        const a = cyl(0.01, 0.01, 0.55, 0xc0c4cc, [0, 1.0, -0.1], tvGroup, 6);
-        a.rotation.z = r;
-        a.position.x = -Math.sin(r) * 0.27;
-    };
-    antenna(0.5);
-    antenna(-0.5);
-    const tvGlow = new THREE.PointLight(0x7fd4ff, 1.2, 3.5, 2);
-    tvGlow.position.set(0, 0.45, 0.9);
+    // bias light behind the screen
+    const bias = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.05), new THREE.MeshBasicMaterial({ color: 0x3f7fd6, transparent: true, opacity: 0.25, toneMapped: false }));
+    bias.position.set(0, 0.62, -0.03);
+    tvGroup.add(bias);
+    const tvGlow = new THREE.PointLight(0x7fb4ff, 1.4, 3.5, 2);
+    tvGlow.position.set(0, 0.6, 0.8);
     tvGroup.add(tvGlow);
 
-    // console in the open shelf, with a cable out to the controller
+    // modern console lying in the open shelf, with a cable out to the controller
     const consoleBox = new THREE.Group();
-    consoleBox.position.set(-0.4, 0.18, 0.1);
+    consoleBox.position.set(-0.4, 0.18, 0.05);
     cabinet.add(consoleBox);
-    box(0.62, 0.14, 0.42, 0x2a2f3d, [0, 0.07, 0], consoleBox, 0.03);
-    box(0.56, 0.02, 0.36, 0x3b4150, [0, 0.145, 0], consoleBox, 0.01);
-    const powerLed = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), new THREE.MeshBasicMaterial({ color: 0x5fd16b }));
-    powerLed.position.set(0.22, 0.08, 0.212);
+    box(0.62, 0.11, 0.38, 0xeeeff3, [0, 0.055, 0], consoleBox, 0.04);
+    box(0.64, 0.035, 0.4, 0x15181f, [0, 0.07, 0], consoleBox, 0.012);
+    const powerLed = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.006, 0.005), new THREE.MeshBasicMaterial({ color: 0x5fb8ff, toneMapped: false }));
+    powerLed.position.set(0, 0.07, 0.202);
     consoleBox.add(powerLed);
-    box(0.08, 0.025, 0.01, C.orange, [-0.15, 0.08, 0.212], consoleBox);
-    // game cartridges / cases
-    for (let i = 0; i < 4; i++) box(0.05, 0.36, 0.3, [C.orange, C.teal, 0x5fd16b, C.slate][i], [0.25 + i * 0.07, 0.36, 0.05], cabinet, 0.01);
+    // game cases
+    for (let i = 0; i < 4; i++) box(0.04, 0.3, 0.24, [0x2b6fd6, 0x2b6fd6, 0x1b1e26, 0x2b6fd6][i], [0.25 + i * 0.06, 0.33, 0.05], cabinet, 0.008);
 
     // bean bag + controller in front of the TV
     const beanbag = sphere(0.55, mat(0x3d6070, { roughness: 1 }), [3.0, 0.32, -1.35], room, 24);
@@ -817,14 +793,19 @@ async function start() {
     pad.position.set(2.95, 0.68, -1.3);
     pad.rotation.set(-0.15, 0.4, 0);
     room.add(pad);
-    box(0.3, 0.06, 0.14, 0x2a2f3d, [0, 0, 0], pad, 0.03);
-    for (const x of [-0.13, 0.13]) sphere(0.07, 0x2a2f3d, [x, -0.01, 0.05], pad, 10);
-    [[0.08, 0.02, C.orange], [0.12, -0.02, C.teal], [0.04, -0.02, 0x5fd16b], [0.08, -0.05, 0xe94f4f]].forEach(([x, z, c]) => sphere(0.018, c, [x, 0.035, z], pad, 6));
-    box(0.08, 0.015, 0.025, 0x15181f, [-0.08, 0.035, 0], pad);
-    box(0.025, 0.015, 0.08, 0x15181f, [-0.08, 0.035, 0], pad);
+    box(0.3, 0.06, 0.14, 0xeeeff3, [0, 0, 0], pad, 0.03);
+    for (const x of [-0.13, 0.13]) {
+        const grip = sphere(0.065, 0xeeeff3, [x, -0.01, 0.06], pad, 12);
+        grip.scale.set(1, 0.8, 1.3);
+    }
+    box(0.12, 0.012, 0.07, 0x15181f, [0, 0.032, -0.01], pad, 0.005); // touchpad
+    for (const x of [-0.07, 0.07]) cyl(0.022, 0.022, 0.02, 0x15181f, [x, 0.04, 0.045], pad, 10); // sticks
+    [[0.11, -0.02], [0.14, 0.0], [0.11, 0.02], [0.08, 0.0]].forEach(([x, z]) => sphere(0.012, 0x9aa0ad, [x, 0.034, z], pad, 6));
+    box(0.04, 0.012, 0.012, 0x9aa0ad, [-0.11, 0.034, 0], pad);
+    box(0.012, 0.012, 0.04, 0x9aa0ad, [-0.11, 0.034, 0], pad);
     const cable = new THREE.Mesh(
         new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
-            new THREE.Vector3(2.45, 0.25, -3.25), new THREE.Vector3(2.5, 0.02, -2.7), new THREE.Vector3(2.8, 0.02, -1.9), new THREE.Vector3(2.95, 0.6, -1.4),
+            new THREE.Vector3(2.45, 0.22, -3.25), new THREE.Vector3(2.5, 0.02, -2.7), new THREE.Vector3(2.8, 0.02, -1.9), new THREE.Vector3(2.95, 0.6, -1.4),
         ]), 24, 0.012, 6),
         mat(0x15181f),
     );
@@ -839,8 +820,8 @@ async function start() {
     const paintTex = new THREE.CanvasTexture(paint.canvas);
     paintTex.colorSpace = THREE.SRGBColorSpace;
     const easel = new THREE.Group();
-    easel.position.set(-2.1, 0, 2.7);
-    easel.rotation.y = 0.75;
+    easel.position.set(-2.9, 0, 1.3);
+    easel.rotation.y = 0.95;
     room.add(easel);
     const easelM = mat(C.wood);
     const legL = box(0.06, 2.3, 0.06, easelM, [-0.45, 1.12, 0], easel);
@@ -863,6 +844,12 @@ async function start() {
     brush.rotation.z = Math.PI / 2 - 0.2;
     cyl(0.14, 0.12, 0.22, 0x3fa7d6, [0.55, 0.11, 0.45], easel, 16);
     hotspot("paint", "paint something", easel);
+
+    // a comfy bean bag next to the easel
+    const beanbag2 = sphere(0.6, mat(0xc9652e, { roughness: 1 }), [-1.7, 0.34, 2.5], room, 24);
+    beanbag2.scale.set(1, 0.58, 1);
+    const dent = sphere(0.36, mat(0xb55a28, { roughness: 1 }), [-1.72, 0.55, 2.48], room, 16);
+    dent.scale.set(1, 0.35, 1);
 
     // ------------------------------------------------ wall decor
 
@@ -913,34 +900,6 @@ async function start() {
     // stack of books on the floor
     for (let i = 0; i < 3; i++) box(0.6 - i * 0.05, 0.1, 0.45, bookColors[i], [-0.9, 0.05 + i * 0.1, 3.1], room, 0.02).rotation.y = i * 0.25;
 
-    // fairy lights along the walls
-    const bulbs = [];
-    const bulbColors = [0xffc56b, 0xffe3a3, 0xff9a4d, 0xffd38a];
-    for (let i = 0; i <= 26; i++) {
-        const u = i / 26;
-        const x = -3.9 + u * 7.8;
-        const y = 4.55 - Math.sin(u * Math.PI * 3) ** 2 * 0.25;
-        bulbs.push([x, y, -3.92]);
-    }
-    for (let i = 1; i <= 22; i++) {
-        const u = i / 22;
-        bulbs.push([-3.92, 4.55 - Math.sin(u * Math.PI * 3) ** 2 * 0.25, -3.9 + u * 7.8]);
-    }
-    const lightsMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.045, 8, 6), new THREE.MeshBasicMaterial({ toneMapped: false }), bulbs.length);
-    const dummy = new THREE.Object3D();
-    bulbs.forEach((p, i) => {
-        dummy.position.set(...p);
-        dummy.updateMatrix();
-        lightsMesh.setMatrixAt(i, dummy.matrix);
-        lightsMesh.setColorAt(i, new THREE.Color(bulbColors[i % 4]));
-    });
-    room.add(lightsMesh);
-    const wire = new THREE.Line(new THREE.BufferGeometry().setFromPoints(bulbs.map((p) => new THREE.Vector3(...p))), new THREE.LineBasicMaterial({ color: 0x1c2336 }));
-    room.add(wire);
-    const fairyGlow = new THREE.PointLight(0xffc88a, 1.6, 7, 2);
-    fairyGlow.position.set(-2, 4.2, -2);
-    room.add(fairyGlow);
-
     // dust motes floating in the lamp light
     const moteCount = 60;
     const moteGeo = new THREE.BufferGeometry();
@@ -967,11 +926,10 @@ async function start() {
     const markerSpots = {
         about: [0.45, 3.15, -3.4],
         contact: [1.55, 2.25, -3.05],
-        projects: [-3.4, 3.95, 1.35],
         cv: [2.75, 4.15, -3.9],
-        music: [-3.5, 3.85, 0.85],
-        games: [2.75, 2.55, -3.4],
-        paint: [-2.1, 2.45, 2.7],
+        music: [-3.6, 1.75, -1.55],
+        games: [2.85, 2.35, -3.45],
+        paint: [-2.9, 2.45, 1.3],
         dog: [2.2, 1.0, 0.4],
     };
     const markers = {};
@@ -997,10 +955,9 @@ async function start() {
     const views = {
         about: V([1.55, 3.0, 0.6], [0.45, 2.35, -3.4]),
         contact: V([2.75, 2.75, -0.7], [1.6, 1.85, -3.05]),
-        projects: V([1.9, 3.0, 3.7], [-3.4, 1.8, 1.35]),
         cv: V([3.35, 3.4, 0.55], [2.75, 3.1, -3.9]),
-        games: V([3.3, 2.3, -0.6], [2.75, 1.6, -3.4]),
-        paint: V([0.3, 2.0, 5.2], [-2.1, 1.3, 2.7]),
+        games: V([3.2, 2.2, -0.4], [2.85, 1.75, -3.45]),
+        paint: V([0.2, 2.0, 4.3], [-2.9, 1.3, 1.3]),
     };
 
     // orbit limits are lifted while the camera flies, otherwise they fight the move
@@ -1279,13 +1236,6 @@ async function start() {
         // record spins while music plays
         if (radio.playing) disc.rotation.y -= dt * 3.5;
         tonearm.rotation.y += ((radio.playing ? 0.05 : 0.25) - tonearm.rotation.y) * ko;
-
-        // twinkly lights
-        for (let i = 0; i < bulbs.length; i++) {
-            const c = new THREE.Color(bulbColors[i % 4]).multiplyScalar(0.75 + 0.45 * Math.sin(t * 2 + i * 1.7));
-            lightsMesh.setColorAt(i, c);
-        }
-        lightsMesh.instanceColor.needsUpdate = true;
 
         // motes drift
         const mp = moteGeo.attributes.position.array;

@@ -18,14 +18,6 @@ export const socials = [
     { name: "Facebook", handle: "kanushkanet", url: "https://www.facebook.com/kanushkanet" },
 ];
 
-// One entry per book on the shelf. Replace these with real projects.
-export const projects = [
-    { title: "Crispy websites", blurb: "Fast, good-looking sites for the web.", url: "https://github.com/kanushka" },
-    { title: "Mobile apps", blurb: "Apps for Android and iOS.", url: "https://github.com/kanushka" },
-    { title: "ML experiments", blurb: "Side projects with machine learning.", url: "https://github.com/kanushka" },
-    { title: "kanushka.com", blurb: "This lofi room, built with Three.js.", url: "https://github.com/kanushka/kanushka.github.io" },
-];
-
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 // Panel HTML for each clickable spot in the room.
@@ -36,14 +28,7 @@ export const panels = {
         <p class="kicker">${esc(profile.role.toLowerCase())}</p>
         <p>${esc(profile.tagline)}</p>
         <p class="kicker">${esc(profile.tags)}</p>
-        <p>Grab a coffee and look around. The bookshelf has my projects, the corkboard has my CV and my phone has every way to reach me. There's a game on the TV and an easel if you feel like painting.</p>`,
-
-    projects: () => `
-        <h2 id="panel-title">the bookshelf</h2>
-        <p class="kicker">things I've built</p>
-        <ul class="list">${projects.map((p) => `
-            <li><a href="${esc(p.url)}" target="_blank" rel="noopener"><b>${esc(p.title)}</b><small>${esc(p.blurb)}</small></a></li>`).join("")}
-        </ul>`,
+        <p>Grab a coffee and look around. The corkboard has my CV and my phone has every way to reach me. There's a game on the TV, an easel if you feel like painting, and the record player has lofi on tap.</p>`,
 
     cv: () => `
         <h2 id="panel-title">my CV</h2>
@@ -53,7 +38,7 @@ export const panels = {
 
     games: () => `
         <h2 id="panel-title">kanushka arcade</h2>
-        <p class="kicker">the console under the tv</p>
+        <p class="kicker">plug in and play</p>
         <div class="toy-slot" data-toy="game"></div>
         <div class="dpad" aria-label="Controls">
             <button data-dir="0,-1" aria-label="up">&#9650;</button>

@@ -10,7 +10,7 @@ const store = {
 // ---------------------------------------------------------------- snake
 
 export function createGame() {
-    const W = 320, H = 240, CELL = 16;
+    const W = 384, H = 224, CELL = 16; // 16:9-ish to fit the TV
     const COLS = W / CELL, ROWS = (H - 32) / CELL; // top 32px is the score bar
     const canvas = document.createElement("canvas");
     canvas.width = W;
