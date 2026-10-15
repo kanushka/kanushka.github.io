@@ -199,31 +199,78 @@
             font-variation-settings: "opsz" 24;
         }
 
-        /* Game link: the ball is the game's own two-world ball, and it rolls on hover */
+        /* Game link: a small window into Mirrorline. White world above the line, black below;
+           the ball rolls along and flips under, the way it does in the game. */
         .game {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
+            display: block;
+            max-width: 420px;
             margin-top: 28px;
-            padding: 10px 22px 10px 10px;
             border: 2px solid var(--fg);
-            border-radius: 999px;
+            border-radius: 18px;
+            overflow: hidden;
             text-decoration: none;
+        }
+        .game .stage {
+            display: block;
+            position: relative;
+            height: 96px;
+            background: linear-gradient(180deg, var(--paper) 50%, var(--ink) 50%);
+            border-bottom: 2px solid var(--fg);
+        }
+        .game .rider {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 22px;
+            height: 22px;
+            margin: -22px 0 0 -11px;
+            border-radius: 50%;
+            background: var(--paper);
+            mix-blend-mode: difference;
+            animation: ride 4s linear infinite;
+        }
+        @keyframes ride {
+            0% { left: -4%; transform: translateY(0); }
+            40% { transform: translateY(0); }
+            50% { transform: translateY(22px); }
+            80% { transform: translateY(22px); }
+            90% { transform: translateY(0); }
+            100% { left: 104%; transform: translateY(0); }
+        }
+        .game .label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 14px 14px 18px;
             transition: background-color .2s ease, color .2s ease;
         }
-        .game strong { display: block; font-weight: 700; line-height: 1.2; }
+        .game strong { display: block; font-size: 1.125rem; font-weight: 700; line-height: 1.2; }
         .game small { display: block; font-size: .875rem; }
-        .game .ball {
+        .game .go {
             flex: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
             border: 2px solid var(--fg);
-            background: linear-gradient(180deg, var(--bg) 50%, var(--fg) 50%);
-            transition: transform .6s cubic-bezier(.6, 0, .2, 1);
+            border-radius: 999px;
+            font-weight: 700;
+            transition: background-color .2s ease, color .2s ease, border-color .2s ease, padding .25s ease;
         }
-        .game:hover { background: var(--fg); color: var(--bg); }
-        .game:hover .ball { border-color: var(--bg); background: linear-gradient(180deg, var(--bg) 50%, var(--fg) 50%); transform: rotate(180deg); }
+        /* A play triangle slides in on hover */
+        .game .go::after {
+            content: "";
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 6px 0 6px 0;
+            border-color: transparent transparent transparent currentColor;
+            transition: border-width .25s ease;
+        }
+        .game:hover .label { background: var(--fg); color: var(--bg); }
+        .game:hover .go { background: var(--bg); color: var(--fg); border-color: var(--bg); padding-right: 14px; }
+        .game:hover .go::after { border-width: 6px 0 6px 10px; }
 
         /* Contacts */
         .contacts h2 {
@@ -354,10 +401,13 @@
                 <h1><span>Kanushka</span><span>Gayan</span></h1>
                 <p class="intro">Software engineer. I learn by day, and build things that make life easier along the way.</p>
                 <a class="game" href="flip-ball/">
-                    <span class="ball" aria-hidden="true"></span>
-                    <span>
-                        <strong>Play Mirrorline</strong>
-                        <small>A black and white gravity game I made</small>
+                    <span class="stage" aria-hidden="true"><span class="rider"></span></span>
+                    <span class="label">
+                        <span>
+                            <strong>Play Mirrorline</strong>
+                            <small>A black and white gravity game I made</small>
+                        </span>
+                        <span class="go" aria-hidden="true">Play</span>
                     </span>
                 </a>
             </section>
