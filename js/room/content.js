@@ -36,7 +36,7 @@ export const panels = {
         <p class="kicker">${esc(profile.role.toLowerCase())}</p>
         <p>${esc(profile.tagline)}</p>
         <p class="kicker">${esc(profile.tags)}</p>
-        <p>Grab a coffee and look around. The bookshelf has my projects, the corkboard has my CV and my phone has every way to reach me.</p>`,
+        <p>Grab a coffee and look around. The bookshelf has my projects, the corkboard has my CV and my phone has every way to reach me. There's a game on the TV and an easel if you feel like painting.</p>`,
 
     projects: () => `
         <h2 id="panel-title">the bookshelf</h2>
@@ -50,6 +50,24 @@ export const panels = {
         <p class="kicker">pinned on the corkboard</p>
         <p>Experience, skills and education, all in one PDF.</p>
         <p><a class="pill" href="${profile.cv}" target="_blank" rel="noopener">open CV</a></p>`,
+
+    games: () => `
+        <h2 id="panel-title">kanushka arcade</h2>
+        <p class="kicker">the console under the tv</p>
+        <div class="toy-slot" data-toy="game"></div>
+        <div class="dpad" aria-label="Controls">
+            <button data-dir="0,-1" aria-label="up">&#9650;</button>
+            <button data-dir="-1,0" aria-label="left">&#9664;</button>
+            <button data-dir="0,1" aria-label="down">&#9660;</button>
+            <button data-dir="1,0" aria-label="right">&#9654;</button>
+        </div>
+        <p class="small-note">Arrow keys or swipe to steer. Your score shows on the TV too.</p>`,
+
+    paint: () => `
+        <h2 id="panel-title">the easel</h2>
+        <p class="kicker">leave a little doodle</p>
+        <div class="toy-slot" data-toy="paint"></div>
+        <p class="small-note">Whatever you paint shows up on the easel in the room.</p>`,
 
     contact: () => `
         <h2 id="panel-title">say hello</h2>

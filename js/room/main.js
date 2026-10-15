@@ -3,6 +3,7 @@ import { OrbitControls } from "three/addons/OrbitControls.js";
 import { RoundedBoxGeometry } from "three/addons/RoundedBoxGeometry.js";
 import { profile, panels } from "./content.js";
 import { LofiRadio } from "./audio.js";
+import { createGame, createPaint } from "./toys.js";
 
 const $ = (s) => document.querySelector(s);
 const body = document.body;
@@ -29,25 +30,26 @@ if (webglOK()) {
 // ---------------------------------------------------------------- palette
 
 const C = {
-    wallBack: 0x4b4078,
-    wallLeft: 0x41376b,
-    trim: 0x2d2550,
+    wallBack: 0x34405e,
+    wallLeft: 0x2b3550,
+    trim: 0x1c2336,
     floor: 0x8a6656,
     wood: 0xa9785f,
     woodDark: 0x6e4b3f,
     cream: 0xfff1dc,
-    pink: 0xff8fab,
-    peach: 0xffb38a,
+    orange: 0xff8a3d,
+    slateTeal: 0x3d6070,
     lamp: 0xffb36b,
-    teal: 0x7bdff2,
-    mint: 0x9be3c3,
-    lilac: 0xb8a4f0,
-    navy: 0x232046,
-    charcoal: 0x2b2838,
+    teal: 0x6cc4ee,
+    mint: 0x7fc8a9,
+    slate: 0x5878a8,
+    navy: 0x1c2336,
+    charcoal: 0x252a36,
     leaf: 0x5fae7f,
     leafDark: 0x3f8a63,
     terracotta: 0xd9785b,
-    cat: 0xf2a65a,
+    dog: 0xd08a4a,
+    dogLight: 0xf6e7d2,
 };
 
 // sky follows the visitor's local time
@@ -145,7 +147,7 @@ async function start() {
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    const bg = { night: 0x1b1a2e, sunset: 0x2e2140, day: 0x3a3360 }[tod];
+    const bg = { night: 0x141a2a, sunset: 0x231e2e, day: 0x2a3450 }[tod];
     scene.background = new THREE.Color(bg);
     scene.fog = new THREE.Fog(bg, 22, 40);
 
@@ -166,13 +168,13 @@ async function start() {
     // ------------------------------------------------ lights
 
     const L = {
-        night: { hemi: 0.55, moon: 0.9, lamp: 9, sky: 0x8f88ff },
+        night: { hemi: 0.55, moon: 0.9, lamp: 9, sky: 0x8fa8ff },
         sunset: { hemi: 0.8, moon: 1.4, lamp: 7, sky: 0xffa07a },
         day: { hemi: 1.3, moon: 2.2, lamp: 4, sky: 0xcfe6ff },
     }[tod];
 
-    scene.add(new THREE.HemisphereLight(L.sky, 0x3b2a3a, L.hemi));
-    scene.add(new THREE.AmbientLight(0x6a5a9a, 0.35));
+    scene.add(new THREE.HemisphereLight(L.sky, 0x2a2f3a, L.hemi));
+    scene.add(new THREE.AmbientLight(0x5a6a9a, 0.35));
 
     const moon = new THREE.DirectionalLight(L.sky, L.moon);
     moon.position.set(-9, 9, 3);
@@ -223,9 +225,20 @@ async function start() {
     box(0.3, 0.3, 8.3, C.trim, [4.15, -0.15, -0.15], room).castShadow = false;
 
     // rug
-    cyl(2.3, 2.3, 0.03, C.lilac, [0.7, 0.015, -0.6], room, 48).castShadow = false;
-    cyl(1.8, 1.8, 0.035, 0xd6c6ff, [0.7, 0.02, -0.6], room, 48).castShadow = false;
-    cyl(1.0, 1.0, 0.04, C.pink, [0.7, 0.025, -0.6], room, 48).castShadow = false;
+    const rugTex = canvasTex(256, 192, (ctx, w, h) => {
+        ctx.fillStyle = "#26324d";
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "#3a4a6b";
+        ctx.fillRect(12, 12, w - 24, h - 24);
+        ctx.fillStyle = "#26324d";
+        ctx.fillRect(20, 20, w - 40, h - 40);
+        ctx.fillStyle = "#ff8a3d";
+        ctx.fillRect(20, h / 2 - 8, w - 40, 6);
+        ctx.fillStyle = "#6cc4ee";
+        ctx.fillRect(20, h / 2 + 4, w - 40, 3);
+    });
+    const rug = box(4.2, 0.03, 3.0, new THREE.MeshStandardMaterial({ map: rugTex, roughness: 1 }), [0.9, 0.015, -0.4], room);
+    rug.castShadow = false;
 
     // ------------------------------------------------ window with live rain
 
@@ -237,7 +250,7 @@ async function start() {
         const W = 512, H = 400;
         const g = ctx.createLinearGradient(0, 0, 0, H);
         const stops = {
-            night: ["#0d0d2b", "#2a2257", "#5a3d7a"],
+            night: ["#0a1024", "#1b2a50", "#3a4d78"],
             sunset: ["#5b3d8f", "#ff8a7a", "#ffc58a"],
             day: ["#8fd0f5", "#c9e8ff", "#ffe9d6"],
         }[tod];
@@ -260,15 +273,15 @@ async function start() {
         ctx.fill();
         ctx.shadowBlur = 0;
         if (tod === "night") {
-            ctx.fillStyle = "#0d0d2b";
+            ctx.fillStyle = "#0a1024";
             ctx.beginPath();
             ctx.arc(405, 85, 30, 0, Math.PI * 2);
             ctx.fill();
         }
         // two layers of city
         const layers = [
-            { col: tod === "day" ? "#9aa6d6" : "#3a2d66", base: 290, max: 110, win: 0.15 },
-            { col: tod === "day" ? "#6c75a8" : "#1f1a40", base: 330, max: 160, win: tod === "day" ? 0.05 : 0.5 },
+            { col: tod === "day" ? "#9aa6c6" : "#26304f", base: 290, max: 110, win: 0.15 },
+            { col: tod === "day" ? "#6c7598" : "#151b30", base: 330, max: 160, win: tod === "day" ? 0.05 : 0.5 },
         ];
         for (const l of layers) {
             let x = -10;
@@ -280,7 +293,7 @@ async function start() {
                 for (let wy = H - (H - l.base) - bh + 8; wy < H - 6; wy += 14) {
                     for (let wx = x + 6; wx < x + bw - 8; wx += 11) {
                         if (rand() < l.win) {
-                            ctx.fillStyle = rand() < 0.7 ? "#ffd38a" : "#ff9ec4";
+                            ctx.fillStyle = rand() < 0.8 ? "#ffd38a" : "#9fd8ff";
                             ctx.fillRect(wx, wy, 5, 7);
                         }
                     }
@@ -335,7 +348,7 @@ async function start() {
     box(2.4, 0.06, 0.06, frameM, [0, 0.15, 0.04], win);
     box(2.9, 0.1, 0.35, frameM, [0, -1.1, 0.16], win, 0.03); // sill
     // curtains
-    const curtainM = mat(C.peach, { roughness: 1 });
+    const curtainM = mat(C.slateTeal, { roughness: 1 });
     for (const s of [-1, 1]) {
         const cg = new THREE.Group();
         cg.position.set(s * 1.6, -0.15, 0.2);
@@ -360,16 +373,16 @@ async function start() {
 
     // keyboard + mouse
     box(1.05, 0.05, 0.34, C.cream, [0.45, 1.585, -2.85], room, 0.02);
-    for (let r = 0; r < 4; r++) for (let k = 0; k < 12; k++) box(0.06, 0.03, 0.055, r === 3 && k > 3 && k < 9 ? C.lilac : 0xe8dccb, [0.05 + k * 0.073, 1.62, -2.96 + r * 0.075], room);
+    for (let r = 0; r < 4; r++) for (let k = 0; k < 12; k++) box(0.06, 0.03, 0.055, r === 3 && k > 3 && k < 9 ? C.slate : 0xe8dccb, [0.05 + k * 0.073, 1.62, -2.96 + r * 0.075], room);
     box(0.13, 0.05, 0.2, C.cream, [1.15, 1.585, -2.82], room, 0.025);
 
     // mug + steam
     const mug = new THREE.Group();
     mug.position.set(-0.15, 1.56, -2.75);
     room.add(mug);
-    cyl(0.12, 0.11, 0.26, C.pink, [0, 0.13, 0], mug);
+    cyl(0.12, 0.11, 0.26, C.orange, [0, 0.13, 0], mug);
     cyl(0.1, 0.1, 0.01, 0x5a3626, [0, 0.25, 0], mug);
-    const handle = mesh(new THREE.TorusGeometry(0.07, 0.022, 8, 16), mat(C.pink), [0.13, 0.13, 0], mug);
+    const handle = mesh(new THREE.TorusGeometry(0.07, 0.022, 8, 16), mat(C.orange), [0.13, 0.13, 0], mug);
     handle.rotation.y = 0;
     const steamM = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3, depthWrite: false });
     const steam = Array.from({ length: 5 }, (_, i) => {
@@ -412,7 +425,7 @@ async function start() {
         ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = "#2b2647";
         ctx.fillRect(0, 0, W, 34);
-        ["#ff8fab", "#ffd38a", "#9be3c3"].forEach((c, i) => {
+        ["#ff8a3d", "#ffd38a", "#7fc8a9"].forEach((c, i) => {
             ctx.fillStyle = c;
             ctx.beginPath();
             ctx.arc(22 + i * 22, 17, 7, 0, Math.PI * 2);
@@ -422,7 +435,7 @@ async function start() {
         ctx.fillStyle = "#c9bfe0";
         ctx.fillText("about-me.js", 100, 23);
         const lines = [
-            [["#ff8fab", "const "], ["#7bdff2", "kanushka"], ["#fff1dc", " = {"]],
+            [["#ff8a3d", "const "], ["#7bdff2", "kanushka"], ["#fff1dc", " = {"]],
             [["#fff1dc", "  role: "], ["#ffd38a", `"${profile.role.toLowerCase()}"`], ["#fff1dc", ","]],
             [["#fff1dc", "  makes: ["], ["#ffd38a", '"web"'], ["#fff1dc", ", "], ["#ffd38a", '"mobile"'], ["#fff1dc", "],"]],
             [["#fff1dc", "  loves: "], ["#ffd38a", '"ML"'], ["#fff1dc", ","]],
@@ -465,6 +478,13 @@ async function start() {
     const screenGlow = new THREE.PointLight(0x8fa8ff, 1.4, 4, 2);
     screenGlow.position.set(0, 0.9, 0.6);
     monitor.add(screenGlow);
+    const ledM = new THREE.MeshBasicMaterial({ color: 0x6cc4ee, toneMapped: false });
+    const led = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.03, 0.02), ledM);
+    led.position.set(0, 0.36, -0.05);
+    monitor.add(led);
+    const ledGlow = new THREE.PointLight(0x6cc4ee, 1.5, 2.5, 2);
+    ledGlow.position.set(0, 0.85, -0.25);
+    monitor.add(ledGlow);
     hotspot("about", "about me", monitor);
 
     // desk lamp
@@ -493,8 +513,8 @@ async function start() {
     // phone on a stand -> contact
     const phoneTex = canvasTex(256, 480, (ctx, w, h) => {
         const g = ctx.createLinearGradient(0, 0, 0, h);
-        g.addColorStop(0, "#ff9ec4");
-        g.addColorStop(1, "#7a6cf0");
+        g.addColorStop(0, "#3fa7d6");
+        g.addColorStop(1, "#1c2a55");
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, w, h);
         ctx.fillStyle = "#fff";
@@ -506,7 +526,7 @@ async function start() {
         ctx.fillStyle = "rgba(255,255,255,0.9)";
         rrect(ctx, 24, 190, w - 48, 110, 22);
         ctx.fill();
-        ctx.fillStyle = "#3a2d66";
+        ctx.fillStyle = "#1c2336";
         ctx.textAlign = "left";
         ctx.font = '800 22px "Nunito", sans-serif';
         ctx.fillText("you", 44, 228);
@@ -535,11 +555,11 @@ async function start() {
     handset.add(phoneScreen);
     hotspot("contact", "contact", phone);
 
-    // ------------------------------------------------ chair + cat
+    // ------------------------------------------------ gaming chair
 
     const chair = new THREE.Group();
-    chair.position.set(0.9, 0, -1.55);
-    chair.rotation.y = -2.2;
+    chair.position.set(0.75, 0, -1.75);
+    chair.rotation.y = -2.5;
     room.add(chair);
     cyl(0.05, 0.05, 0.75, C.charcoal, [0, 0.5, 0], chair, 10);
     for (let i = 0; i < 5; i++) {
@@ -547,33 +567,72 @@ async function start() {
         leg.rotation.y = (-i * Math.PI * 2) / 5;
         sphere(0.05, C.charcoal, [Math.cos((i * Math.PI * 2) / 5) * 0.42, 0.05, Math.sin((i * Math.PI * 2) / 5) * 0.42], chair, 8);
     }
-    box(1.0, 0.16, 0.95, C.pink, [0, 0.95, 0], chair, 0.07);
-    box(0.95, 1.0, 0.14, C.pink, [0, 1.55, 0.46], chair, 0.07);
-    box(0.08, 0.5, 0.08, C.charcoal, [0, 1.2, 0.46], chair);
+    const seatM = mat(0x2a2f3d, { roughness: 0.6 });
+    const accentM = mat(C.orange, { roughness: 0.6 });
+    box(0.95, 0.16, 0.9, seatM, [0, 0.95, 0], chair, 0.06);
+    box(0.5, 0.17, 0.75, accentM, [0, 0.955, 0], chair, 0.05);
+    box(0.9, 1.45, 0.16, seatM, [0, 1.75, 0.44], chair, 0.07);
+    box(0.36, 1.25, 0.17, accentM, [0, 1.7, 0.44], chair, 0.05);
+    box(0.5, 0.18, 0.12, seatM, [0, 2.32, 0.34], chair, 0.06); // headrest
+    for (const x of [-0.5, 0.5]) {
+        box(0.08, 0.3, 0.08, C.charcoal, [x, 1.15, 0.0], chair);
+        box(0.12, 0.06, 0.45, seatM, [x, 1.32, 0.0], chair, 0.03);
+    }
 
-    const cat = new THREE.Group();
-    cat.position.set(0, 1.03, -0.05);
-    chair.add(cat);
-    const catM = mat(C.cat);
-    const catBody = sphere(0.28, catM, [0, 0.14, 0], cat);
-    catBody.scale.set(1.15, 0.6, 0.9);
-    const head = sphere(0.17, catM, [0.27, 0.18, -0.12], cat);
-    head.scale.set(1, 0.9, 1);
+    // ------------------------------------------------ sleepy dog in his bed
+
+    const dogBed = new THREE.Group();
+    dogBed.position.set(2.2, 0, 0.4);
+    dogBed.rotation.y = 0.5;
+    room.add(dogBed);
+    const bedM = mat(0x4a5878);
+    const ring = mesh(new THREE.TorusGeometry(0.62, 0.17, 12, 32), bedM, [0, 0.17, 0], dogBed);
+    ring.rotation.x = Math.PI / 2;
+    cyl(0.62, 0.62, 0.12, mat(0xe9dcc6), [0, 0.07, 0], dogBed, 32);
+
+    const dog = new THREE.Group();
+    dog.position.set(0, 0.16, 0);
+    dogBed.add(dog);
+    const dogM = mat(C.dog);
+    const dogLightM = mat(C.dogLight);
+    const dogBody = sphere(0.3, dogM, [0, 0.16, 0.02], dog);
+    dogBody.scale.set(1.3, 0.62, 0.85);
+    const belly = sphere(0.2, dogLightM, [0.05, 0.1, 0.15], dog);
+    belly.scale.set(1.3, 0.6, 0.7);
+    const dogHead = new THREE.Group();
+    dogHead.position.set(0.38, 0.17, 0.12);
+    dog.add(dogHead);
+    sphere(0.17, dogM, [0, 0, 0], dogHead);
+    const snout = sphere(0.09, dogLightM, [0.15, -0.04, 0.0], dogHead);
+    snout.scale.set(1.2, 0.8, 0.9);
+    sphere(0.03, C.charcoal, [0.25, -0.02, 0], dogHead, 8); // nose
     for (const s of [-1, 1]) {
-        const ear = mesh(new THREE.ConeGeometry(0.06, 0.12, 4), catM, [0.3 + s * 0.03, 0.33, -0.12 + s * 0.09], cat);
-        ear.rotation.x = s * 0.35;
-        const eye = box(0.012, 0.012, 0.05, C.charcoal, [0.42, 0.2, -0.12 + s * 0.06], cat);
-        eye.rotation.y = 0.2;
+        const ear = sphere(0.07, 0x8a5a30, [-0.02, 0.1, s * 0.13], dogHead, 10);
+        ear.scale.set(0.8, 1.4, 0.45);
+        ear.rotation.x = s * 0.5;
+        box(0.05, 0.01, 0.01, C.charcoal, [0.12, 0.04, s * 0.07], dogHead); // closed eyes
     }
-    const tail = mesh(new THREE.TorusGeometry(0.25, 0.045, 8, 20, Math.PI * 1.1), catM, [-0.02, 0.06, 0.02], cat);
-    tail.rotation.x = Math.PI / 2;
-    tail.rotation.z = 0.6;
-    // stripes
-    for (let i = 0; i < 3; i++) {
-        const st = sphere(0.06, 0xd9823c, [-0.12 + i * 0.12, 0.29, 0], cat, 8);
-        st.scale.set(0.5, 0.25, 2.3);
+    for (const z of [-0.12, 0.12]) {
+        const paw = sphere(0.06, dogLightM, [0.42, 0.04, 0.05 + z * 0.6], dog, 8);
+        paw.scale.set(1.6, 0.7, 1);
     }
-    hotspot("cat", "pet the cat", cat);
+    const tail = new THREE.Group();
+    tail.position.set(-0.36, 0.18, -0.05);
+    dog.add(tail);
+    const tailMesh = sphere(0.06, dogM, [-0.08, 0.06, 0], tail, 8);
+    tailMesh.scale.set(2, 0.9, 0.9);
+    const zzz = canvasTex(64, 64, (ctx) => {
+        ctx.fillStyle = "#e8f0ff";
+        ctx.font = 'bold 34px "Nunito", sans-serif';
+        ctx.fillText("z", 20, 44);
+    });
+    const zs = Array.from({ length: 3 }, (_, i) => {
+        const z = new THREE.Sprite(new THREE.SpriteMaterial({ map: zzz, transparent: true, depthWrite: false }));
+        z.userData.offset = i / 3;
+        dog.add(z);
+        return z;
+    });
+    hotspot("dog", "pet the dog", dogBed);
 
     // ------------------------------------------------ bookshelf -> projects
 
@@ -584,7 +643,7 @@ async function start() {
     box(0.8, 3.2, 0.08, shelfM, [0, 1.6, -1.1], shelf);
     box(0.8, 3.2, 0.08, shelfM, [0, 1.6, 1.1], shelf);
     box(0.06, 3.2, 2.2, mat(0xe9dcc6), [-0.37, 1.6, 0], shelf);
-    const bookColors = [C.pink, C.teal, C.lamp, C.lilac, C.mint, C.peach, 0x7a6cf0, 0xffd38a, 0xf47c7c];
+    const bookColors = [0x2f4a6d, C.teal, C.lamp, C.slate, 0x5f7d4f, C.orange, 0x8b3a3a, 0xd9b45a, 0x3f4656, 0x4f8fa8];
     for (let s = 0; s < 4; s++) {
         const y = 0.06 + s * 0.95;
         box(0.8, 0.08, 2.2, shelfM, [0, y, 0], shelf);
@@ -611,7 +670,6 @@ async function start() {
         vine.scale.set(0.7, 1, 1.2);
     }
     sphere(0.16, C.leaf, [0, 3.58, 0.6], shelf, 10);
-    box(0.4, 0.3, 0.3, C.lilac, [0, 3.39, -0.5], shelf, 0.05);
     hotspot("projects", "my projects", shelf);
 
     // ------------------------------------------------ corkboard -> cv
@@ -644,7 +702,7 @@ async function start() {
     const photo = new THREE.Mesh(new THREE.PlaneGeometry(0.52, 0.52), new THREE.MeshStandardMaterial({ map: avatarTex, color: 0xffffff, roughness: 0.6 }));
     photo.position.set(0, 0.05, 0.002);
     polaroid.add(photo);
-    const photoBg = new THREE.Mesh(new THREE.PlaneGeometry(0.52, 0.52), mat(0xffc7d6));
+    const photoBg = new THREE.Mesh(new THREE.PlaneGeometry(0.52, 0.52), mat(0x9fd8ff));
     photoBg.position.set(0, 0.05, 0.001);
     polaroid.add(photoBg);
     sphere(0.035, 0xf47c7c, [0, 0.31, 0.02], polaroid, 8);
@@ -652,13 +710,13 @@ async function start() {
     const cvTex = canvasTex(256, 340, (ctx, w, h) => {
         ctx.fillStyle = "#fffaf0";
         ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = "#3a2d66";
+        ctx.fillStyle = "#1c2336";
         ctx.font = '40px "Major Mono Display", monospace';
         ctx.fillText("cv", 24, 60);
         ctx.font = '800 18px "Nunito", sans-serif';
         ctx.fillText(profile.name, 24, 92);
         for (let i = 0; i < 9; i++) {
-            ctx.fillStyle = i % 3 === 0 ? "#ff8fab" : "#c9bfe0";
+            ctx.fillStyle = i % 3 === 0 ? "#ff8a3d" : "#b9c3d9";
             ctx.fillRect(24, 120 + i * 22, i % 3 === 0 ? 90 : 150 + ((i * 37) % 60), 8);
         }
     });
@@ -678,55 +736,155 @@ async function start() {
     note(0.78, -0.35, C.mint, -0.12);
     hotspot("cv", "my cv", board);
 
-    // ------------------------------------------------ record player -> music
+    // ------------------------------------------------ record player (on the bookshelf) -> music
 
-    const cabinet = new THREE.Group();
-    cabinet.position.set(2.85, 0, -3.45);
-    room.add(cabinet);
-    box(1.6, 1.1, 0.9, C.wood, [0, 0.6, 0], cabinet, 0.04);
-    box(0.7, 0.85, 0.02, C.woodDark, [-0.38, 0.6, 0.45], cabinet);
-    box(0.7, 0.85, 0.02, C.woodDark, [0.38, 0.6, 0.45], cabinet);
-    for (const x of [-0.65, 0.65]) cyl(0.04, 0.03, 0.1, C.charcoal, [x, 0.05, 0.3], cabinet, 8);
-    // vinyl sleeves inside
     const player = new THREE.Group();
-    player.position.set(0, 1.15, 0.05);
-    cabinet.add(player);
-    box(1.05, 0.14, 0.75, C.cream, [0, 0.07, 0], player, 0.03);
+    player.position.set(0.02, 3.24, -0.5);
+    player.rotation.y = Math.PI / 2;
+    player.scale.setScalar(0.75);
+    shelf.add(player);
+    box(1.05, 0.14, 0.75, 0x3a3f4d, [0, 0.07, 0], player, 0.03);
     cyl(0.3, 0.3, 0.02, C.charcoal, [-0.12, 0.15, 0], player, 32);
     const disc = new THREE.Group();
     disc.position.set(-0.12, 0.17, 0);
     player.add(disc);
     cyl(0.29, 0.29, 0.015, 0x15131f, [0, 0, 0], disc, 32);
-    cyl(0.1, 0.1, 0.017, C.pink, [0, 0, 0], disc, 20);
+    cyl(0.1, 0.1, 0.017, C.orange, [0, 0, 0], disc, 20);
     box(0.08, 0.018, 0.02, C.cream, [0.05, 0.003, 0], disc); // marker so you can see it spin
     const tonearm = box(0.04, 0.03, 0.45, 0xd0d0d8, [0.32, 0.2, 0.05], player);
     tonearm.rotation.y = 0.25;
     cyl(0.05, 0.05, 0.06, 0xd0d0d8, [0.36, 0.17, -0.2], player, 12);
-    // speaker
-    box(0.35, 0.55, 0.35, C.charcoal, [0.55, 1.42, -0.1], cabinet, 0.04).rotation.y = -0.2;
-    cyl(0.1, 0.1, 0.02, 0x4b4560, [0.58, 1.48, 0.08], cabinet, 20).rotation.x = Math.PI / 2;
     hotspot("music", "lofi radio", player);
+
+    // ------------------------------------------------ retro TV + console -> games
+
+    const game = createGame();
+    const tvTex = new THREE.CanvasTexture(game.canvas);
+    tvTex.colorSpace = THREE.SRGBColorSpace;
+    tvTex.magFilter = THREE.NearestFilter;
+
+    const cabinet = new THREE.Group();
+    cabinet.position.set(2.85, 0, -3.45);
+    room.add(cabinet);
+    const cabM = mat(C.wood);
+    box(1.7, 0.08, 0.9, cabM, [0, 1.06, 0], cabinet, 0.02);
+    box(1.7, 0.08, 0.9, cabM, [0, 0.14, 0], cabinet, 0.02);
+    box(0.08, 1.0, 0.9, cabM, [-0.81, 0.6, 0], cabinet);
+    box(0.08, 1.0, 0.9, cabM, [0.81, 0.6, 0], cabinet);
+    box(0.06, 0.88, 0.85, cabM, [0, 0.6, 0], cabinet);
+    box(1.6, 0.9, 0.04, C.woodDark, [0, 0.6, -0.43], cabinet);
+    box(1.6, 0.06, 0.88, cabM, [0, 0.6, 0], cabinet);
+    for (const x of [-0.7, 0.7]) cyl(0.04, 0.03, 0.1, C.charcoal, [x, 0.05, 0.3], cabinet, 8);
+
+    const tvGroup = new THREE.Group();
+    tvGroup.position.set(-0.1, 1.1, 0.0);
+    cabinet.add(tvGroup);
+    box(1.1, 0.85, 0.75, 0x3b4150, [0, 0.43, -0.02], tvGroup, 0.08);
+    box(0.95, 0.7, 0.04, 0x15181f, [0, 0.45, 0.35], tvGroup, 0.03);
+    const tvScreen = new THREE.Mesh(new THREE.PlaneGeometry(0.84, 0.62), new THREE.MeshBasicMaterial({ map: tvTex, toneMapped: false }));
+    tvScreen.position.set(0, 0.45, 0.372);
+    tvGroup.add(tvScreen);
+    const knobs = [[0.47, 0.75], [0.47, 0.62]];
+    knobs.forEach(([x, y]) => cyl(0.03, 0.03, 0.03, C.cream, [x, y, 0.36], tvGroup, 10).rotation.x = Math.PI / 2);
+    const antenna = (r) => {
+        const a = cyl(0.01, 0.01, 0.55, 0xc0c4cc, [0, 1.0, -0.1], tvGroup, 6);
+        a.rotation.z = r;
+        a.position.x = -Math.sin(r) * 0.27;
+    };
+    antenna(0.5);
+    antenna(-0.5);
+    const tvGlow = new THREE.PointLight(0x7fd4ff, 1.2, 3.5, 2);
+    tvGlow.position.set(0, 0.45, 0.9);
+    tvGroup.add(tvGlow);
+
+    // console in the open shelf, with a cable out to the controller
+    const consoleBox = new THREE.Group();
+    consoleBox.position.set(-0.4, 0.18, 0.1);
+    cabinet.add(consoleBox);
+    box(0.62, 0.14, 0.42, 0x2a2f3d, [0, 0.07, 0], consoleBox, 0.03);
+    box(0.56, 0.02, 0.36, 0x3b4150, [0, 0.145, 0], consoleBox, 0.01);
+    const powerLed = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), new THREE.MeshBasicMaterial({ color: 0x5fd16b }));
+    powerLed.position.set(0.22, 0.08, 0.212);
+    consoleBox.add(powerLed);
+    box(0.08, 0.025, 0.01, C.orange, [-0.15, 0.08, 0.212], consoleBox);
+    // game cartridges / cases
+    for (let i = 0; i < 4; i++) box(0.05, 0.36, 0.3, [C.orange, C.teal, 0x5fd16b, C.slate][i], [0.25 + i * 0.07, 0.36, 0.05], cabinet, 0.01);
+
+    // bean bag + controller in front of the TV
+    const beanbag = sphere(0.55, mat(0x3d6070, { roughness: 1 }), [3.0, 0.32, -1.35], room, 24);
+    beanbag.scale.set(1, 0.6, 1);
+    const pad = new THREE.Group();
+    pad.position.set(2.95, 0.68, -1.3);
+    pad.rotation.set(-0.15, 0.4, 0);
+    room.add(pad);
+    box(0.3, 0.06, 0.14, 0x2a2f3d, [0, 0, 0], pad, 0.03);
+    for (const x of [-0.13, 0.13]) sphere(0.07, 0x2a2f3d, [x, -0.01, 0.05], pad, 10);
+    [[0.08, 0.02, C.orange], [0.12, -0.02, C.teal], [0.04, -0.02, 0x5fd16b], [0.08, -0.05, 0xe94f4f]].forEach(([x, z, c]) => sphere(0.018, c, [x, 0.035, z], pad, 6));
+    box(0.08, 0.015, 0.025, 0x15181f, [-0.08, 0.035, 0], pad);
+    box(0.025, 0.015, 0.08, 0x15181f, [-0.08, 0.035, 0], pad);
+    const cable = new THREE.Mesh(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+            new THREE.Vector3(2.45, 0.25, -3.25), new THREE.Vector3(2.5, 0.02, -2.7), new THREE.Vector3(2.8, 0.02, -1.9), new THREE.Vector3(2.95, 0.6, -1.4),
+        ]), 24, 0.012, 6),
+        mat(0x15181f),
+    );
+    room.add(cable);
+    hotspot("games", "play a game", tvGroup);
+    hotspot("games", "play a game", consoleBox);
+    hotspot("games", "play a game", pad);
+
+    // ------------------------------------------------ paint easel -> paint
+
+    const paint = createPaint();
+    const paintTex = new THREE.CanvasTexture(paint.canvas);
+    paintTex.colorSpace = THREE.SRGBColorSpace;
+    const easel = new THREE.Group();
+    easel.position.set(-2.1, 0, 2.7);
+    easel.rotation.y = 0.75;
+    room.add(easel);
+    const easelM = mat(C.wood);
+    const legL = box(0.06, 2.3, 0.06, easelM, [-0.45, 1.12, 0], easel);
+    legL.rotation.z = -0.14;
+    const legR = box(0.06, 2.3, 0.06, easelM, [0.45, 1.12, 0], easel);
+    legR.rotation.z = 0.14;
+    const legB = box(0.06, 2.1, 0.06, easelM, [0, 1.0, -0.42], easel);
+    legB.rotation.x = -0.32;
+    box(1.2, 0.06, 0.16, easelM, [0, 0.82, 0.04], easel); // ledge
+    box(0.9, 0.05, 0.05, easelM, [0, 2.1, 0.0], easel);
+    box(1.08, 0.82, 0.05, 0xf5efe3, [0, 1.25, 0.06], easel);
+    const art = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.75), new THREE.MeshStandardMaterial({ map: paintTex, roughness: 0.9 }));
+    art.position.set(0, 1.25, 0.087);
+    easel.add(art);
+    // palette + brushes on the ledge and a paint pot on the floor
+    const pal = cyl(0.14, 0.14, 0.02, C.cream, [0.32, 0.86, 0.06], easel, 16);
+    pal.scale.set(1.3, 1, 0.8);
+    [C.orange, C.teal, 0x5fd16b, 0xe94f4f].forEach((c, i) => sphere(0.025, c, [0.22 + i * 0.065, 0.875, 0.06 + (i % 2) * 0.03], easel, 6));
+    const brush = cyl(0.012, 0.012, 0.35, C.woodDark, [-0.3, 0.88, 0.08], easel, 6);
+    brush.rotation.z = Math.PI / 2 - 0.2;
+    cyl(0.14, 0.12, 0.22, 0x3fa7d6, [0.55, 0.11, 0.45], easel, 16);
+    hotspot("paint", "paint something", easel);
 
     // ------------------------------------------------ wall decor
 
     const posterTex = canvasTex(300, 420, (ctx, w, h) => {
-        const g = ctx.createLinearGradient(0, 0, 0, h);
-        g.addColorStop(0, "#3a2d66");
-        g.addColorStop(1, "#ff8fab");
-        ctx.fillStyle = g;
+        ctx.fillStyle = "#1c2336";
         ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = "#ffd38a";
-        ctx.beginPath();
-        ctx.arc(w / 2, 190, 80, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#3a2d66";
-        for (let i = 0; i < 5; i++) ctx.fillRect(w / 2 - 90, 200 + i * 14, 180, 5 + i);
-        ctx.fillStyle = "#fff1dc";
-        ctx.font = '42px "Major Mono Display", monospace';
+        ctx.strokeStyle = "#ff8a3d";
+        ctx.lineWidth = 6;
+        ctx.strokeRect(14, 14, w - 28, h - 28);
+        // a pixel space invader
+        const inv = ["00100000100", "00010001000", "00111111100", "01101110110", "11111111111", "10111111101", "10100000101", "00011011000"];
+        const px = 18;
+        ctx.fillStyle = "#5fd16b";
+        inv.forEach((row, y) => [...row].forEach((c, x) => c === "1" && ctx.fillRect(w / 2 - (11 * px) / 2 + x * px, 70 + y * px, px - 2, px - 2)));
+        ctx.fillStyle = "#ffc56b";
+        ctx.font = '22px "Press Start 2P", monospace';
         ctx.textAlign = "center";
-        ctx.fillText("lofi", w / 2, 340);
+        ctx.fillText("PRESS", w / 2, 270);
+        ctx.fillText("START", w / 2, 305);
+        ctx.fillStyle = "#9fd8ff";
         ctx.font = '18px "Courier Prime", monospace';
-        ctx.fillText("beats to code to", w / 2, 372);
+        ctx.fillText("player 1: kanushka", w / 2, 360);
     });
     const poster = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 1.47), new THREE.MeshStandardMaterial({ map: posterTex, roughness: 0.8 }));
     poster.position.set(-2.4, 3.2, -3.98);
@@ -752,14 +910,12 @@ async function start() {
         leaf.rotation.set(Math.sin(a) * 0.6, 0, -Math.cos(a) * 0.6);
     }
 
-    // floor cushion + stack of books
-    const cushion = sphere(0.55, C.teal, [-2.2, 0.2, 2.5], room, 20);
-    cushion.scale.set(1, 0.4, 1);
-    for (let i = 0; i < 3; i++) box(0.6 - i * 0.05, 0.1, 0.45, bookColors[i], [-1.3, 0.05 + i * 0.1, 2.9], room, 0.02).rotation.y = i * 0.25;
+    // stack of books on the floor
+    for (let i = 0; i < 3; i++) box(0.6 - i * 0.05, 0.1, 0.45, bookColors[i], [-0.9, 0.05 + i * 0.1, 3.1], room, 0.02).rotation.y = i * 0.25;
 
     // fairy lights along the walls
     const bulbs = [];
-    const bulbColors = [0xffd38a, 0xff9ec4, 0x9be3c3, 0xb8a4f0];
+    const bulbColors = [0xffc56b, 0xffe3a3, 0xff9a4d, 0xffd38a];
     for (let i = 0; i <= 26; i++) {
         const u = i / 26;
         const x = -3.9 + u * 7.8;
@@ -779,9 +935,9 @@ async function start() {
         lightsMesh.setColorAt(i, new THREE.Color(bulbColors[i % 4]));
     });
     room.add(lightsMesh);
-    const wire = new THREE.Line(new THREE.BufferGeometry().setFromPoints(bulbs.map((p) => new THREE.Vector3(...p))), new THREE.LineBasicMaterial({ color: 0x2b2838 }));
+    const wire = new THREE.Line(new THREE.BufferGeometry().setFromPoints(bulbs.map((p) => new THREE.Vector3(...p))), new THREE.LineBasicMaterial({ color: 0x1c2336 }));
     room.add(wire);
-    const fairyGlow = new THREE.PointLight(0xffb3c8, 1.6, 7, 2);
+    const fairyGlow = new THREE.PointLight(0xffc88a, 1.6, 7, 2);
     fairyGlow.position.set(-2, 4.2, -2);
     room.add(fairyGlow);
 
@@ -813,8 +969,10 @@ async function start() {
         contact: [1.55, 2.25, -3.05],
         projects: [-3.4, 3.95, 1.35],
         cv: [2.75, 4.15, -3.9],
-        music: [2.75, 1.75, -3.4],
-        cat: [0.9, 1.75, -1.55],
+        music: [-3.5, 3.85, 0.85],
+        games: [2.75, 2.55, -3.4],
+        paint: [-2.1, 2.45, 2.7],
+        dog: [2.2, 1.0, 0.4],
     };
     const markers = {};
     for (const [k, p] of Object.entries(markerSpots)) {
@@ -841,6 +999,8 @@ async function start() {
         contact: V([2.75, 2.75, -0.7], [1.6, 1.85, -3.05]),
         projects: V([1.9, 3.0, 3.7], [-3.4, 1.8, 1.35]),
         cv: V([3.35, 3.4, 0.55], [2.75, 3.1, -3.9]),
+        games: V([3.3, 2.3, -0.6], [2.75, 1.6, -3.4]),
+        paint: V([0.3, 2.0, 5.2], [-2.1, 1.3, 2.7]),
     };
 
     // orbit limits are lifted while the camera flies, otherwise they fight the move
@@ -892,6 +1052,13 @@ async function start() {
         current = key;
         visit(key);
         panelBody.innerHTML = panels[key]();
+        const slot = panelBody.querySelector(".toy-slot");
+        if (slot && slot.dataset.toy === "game") {
+            slot.appendChild(game.canvas);
+            panelBody.querySelectorAll("[data-dir]").forEach((b) => b.addEventListener("click", () => game.turn(...b.dataset.dir.split(",").map(Number))));
+            setTimeout(() => game.canvas.focus({ preventScroll: true }), 50);
+        }
+        if (slot && slot.dataset.toy === "paint") slot.append(paint.canvas, paint.tools);
         panel.hidden = false;
         body.classList.add("panel-open");
         document.querySelectorAll(".chips button").forEach((b) => b.classList.toggle("active", b.dataset.open === key));
@@ -919,55 +1086,52 @@ async function start() {
     window.addEventListener("keydown", (e) => e.key === "Escape" && closePanel());
     document.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => openPanel(b.dataset.open)));
 
-    // hearts + purr when the cat is petted
+    // hearts, a wag and a sleepy "boof" when the dog is petted
     const hearts = [];
     const heartTex = canvasTex(64, 64, (ctx) => {
-        ctx.fillStyle = "#ff8fab";
+        ctx.fillStyle = "#ff8a3d";
         ctx.font = "48px serif";
         ctx.textAlign = "center";
-        ctx.fillText("♥", 32, 48);
+        ctx.fillText("\u2665", 32, 48);
     });
-    function petCat() {
-        visit("cat");
+    let wag = 0;
+    function petDog() {
+        visit("dog");
         for (let i = 0; i < 5; i++) {
             const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: heartTex, transparent: true, depthWrite: false }));
             const p = new THREE.Vector3();
-            cat.getWorldPosition(p);
-            s.position.copy(p).add(new THREE.Vector3((Math.random() - 0.5) * 0.4, 0.4, (Math.random() - 0.5) * 0.4));
+            dog.getWorldPosition(p);
+            s.position.copy(p).add(new THREE.Vector3((Math.random() - 0.5) * 0.4, 0.5, (Math.random() - 0.5) * 0.4));
             s.scale.setScalar(0.22);
             s.userData = { life: 0, delay: i * 0.12, vx: (Math.random() - 0.5) * 0.3 };
             scene.add(s);
             hearts.push(s);
         }
-        catBounce = 1;
-        if (radio.ctx || radio.playing !== undefined) purr();
+        wag = 2.5;
+        boof();
     }
-    let catBounce = 0;
-    function purr() {
+    function boof() {
         try {
             radio.init();
             const ctx = radio.ctx;
             ctx.resume();
-            const t = ctx.currentTime;
-            const src = ctx.createBufferSource();
-            src.buffer = radio.noise;
-            const f = ctx.createBiquadFilter();
-            f.type = "lowpass";
-            f.frequency.value = 180;
-            const g = ctx.createGain();
-            g.gain.setValueAtTime(0, t);
-            const am = ctx.createOscillator();
-            am.frequency.value = 24;
-            const amG = ctx.createGain();
-            amG.gain.value = 0.25;
-            am.connect(amG).connect(g.gain);
-            g.gain.linearRampToValueAtTime(0.35, t + 0.2);
-            g.gain.linearRampToValueAtTime(0, t + 1.6);
-            src.connect(f).connect(g).connect(ctx.destination);
-            src.start(t);
-            src.stop(t + 1.7);
-            am.start(t);
-            am.stop(t + 1.7);
+            for (const [delay, f0] of [[0, 210], [0.28, 180]]) {
+                const t = ctx.currentTime + delay;
+                const o = ctx.createOscillator();
+                o.type = "triangle";
+                o.frequency.setValueAtTime(f0, t);
+                o.frequency.exponentialRampToValueAtTime(f0 * 0.55, t + 0.16);
+                const f = ctx.createBiquadFilter();
+                f.type = "lowpass";
+                f.frequency.value = 900;
+                const g = ctx.createGain();
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(0.28, t + 0.02);
+                g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+                o.connect(f).connect(g).connect(ctx.destination);
+                o.start(t);
+                o.stop(t + 0.25);
+            }
         } catch (e) { /* sound is a bonus */ }
     }
 
@@ -980,7 +1144,7 @@ async function start() {
 
     function activate(key) {
         if (key === "music") { visit("music"); setMusic(radio.toggle()); return; }
-        if (key === "cat") return petCat();
+        if (key === "dog") return petDog();
         if (key === "lamp") return toggleLamp();
         openPanel(key);
     }
@@ -1092,11 +1256,25 @@ async function start() {
             s.material.opacity = 0.28 * Math.sin(p * Math.PI);
         });
 
-        // sleepy cat breathing
-        catBounce = Math.max(0, catBounce - dt * 1.5);
-        catBody.scale.y = 0.6 + Math.sin(t * 1.6) * 0.02 + catBounce * 0.08;
-        head.position.y = 0.18 + catBounce * Math.abs(Math.sin(t * 14)) * 0.05;
-        tail.rotation.z = 0.6 + Math.sin(t * 0.8) * 0.08;
+        // sleepy dog breathing, wagging when petted
+        wag = Math.max(0, wag - dt);
+        dogBody.scale.y = 0.62 + Math.sin(t * 1.4) * 0.025;
+        dogHead.rotation.z = wag > 0 ? Math.sin(t * 6) * 0.08 + 0.15 : 0;
+        tail.rotation.y = wag > 0 ? Math.sin(t * 22) * 0.7 : Math.sin(t * 0.7) * 0.1;
+        zs.forEach((z) => {
+            const p = (t * 0.25 + z.userData.offset) % 1;
+            z.visible = wag <= 0;
+            z.position.set(0.45 + p * 0.15, 0.4 + p * 0.5, 0.1);
+            z.scale.setScalar(0.08 + p * 0.1);
+            z.material.opacity = Math.sin(p * Math.PI) * 0.8;
+        });
+
+        // the TV always shows the arcade (attract mode until someone plays)
+        game.update(dt);
+        tvTex.needsUpdate = true;
+        if (paint.consumeChange()) paintTex.needsUpdate = true;
+        led.material.color.setHSL((0.55 + Math.sin(t * 0.2) * 0.08) % 1, 0.8, 0.6);
+        ledGlow.color.copy(led.material.color);
 
         // record spins while music plays
         if (radio.playing) disc.rotation.y -= dt * 3.5;
@@ -1170,6 +1348,6 @@ async function start() {
     quiet.addEventListener("click", () => go(false), { once: true });
 
     // tiny hello for people who open devtools
-    console.log("%c hey there, curious dev ☕ ", "background:#ff8fab;color:#1b1a2e;font-weight:bold;padding:4px 8px;border-radius:6px");
+    console.log("%c hey there, curious dev ☕ ", "background:#ff8a3d;color:#141a2a;font-weight:bold;padding:4px 8px;border-radius:6px");
     console.log("%cthis room is plain three.js, no build step. peek at /js/room/", "color:#b8a4f0");
 }
