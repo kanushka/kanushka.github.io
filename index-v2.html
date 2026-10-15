@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kanushka Gayan</title>
+  <meta name="description" content="Kanushka Gayan, software engineer. I make crispy websites and mobile apps.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kanushka.com/">
+  <meta property="og:title" content="Kanushka Gayan">
+  <meta property="og:description" content="Software engineer. I make crispy websites and mobile apps.">
+  <meta property="og:image" content="https://kanushka.com/images/meta-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@KanushkaTwi">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="manifest" href="icons/site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Two colours, that's the whole palette. The theme toggle swaps them. */
+    :root {
+      --ink: #1c2be8;
+      --paper: #f4efe4;
+    }
+    :root[data-theme="dark"] {
+      --ink: #f4efe4;
+      --paper: #1c2be8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body { margin: 0; }
+
+    body {
+      min-height: 100svh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 15px;
+      line-height: 1.55;
+      transition: background-color .35s ease, color .35s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--ink); color: var(--paper); }
+
+    a { color: inherit; }
+
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 32px;
+    }
+
+    /* top bar */
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      letter-spacing: .04em;
+    }
+    .theme-toggle {
+      appearance: none;
+      border: 1.5px solid var(--ink);
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .theme-toggle:hover { background: var(--ink); color: var(--paper); }
+    .swatch {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: linear-gradient(90deg, var(--ink) 50%, var(--paper) 50%);
+      border: 1.5px solid currentColor;
+      transition: transform .4s ease;
+    }
+    :root[data-theme="dark"] .swatch { transform: rotate(180deg); }
+
+    /* main */
+    main {
+      display: grid;
+      gap: 40px;
+      align-content: center;
+    }
+    @media (min-width: 860px) {
+      main {
+        grid-template-columns: 1fr 1fr;
+        gap: 72px;
+        align-items: center;
+      }
+    }
+
+    .intro { display: grid; gap: 20px; justify-items: start; }
+
+    .avatar {
+      width: 132px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid var(--ink);
+      overflow: hidden;
+      background: var(--paper);
+      transition: transform .25s ease;
+      will-change: transform;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: url(#duotone-light);
+    }
+    :root[data-theme="dark"] .avatar img { filter: url(#duotone-dark); }
+    @media (min-width: 860px) { .avatar { width: 168px; } }
+
+    h1 {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(56px, 13vw, 112px);
+      line-height: .92;
+      letter-spacing: -.02em;
+      margin: 0;
+    }
+    h1 em { font-style: italic; }
+
+    .role {
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    .bio {
+      max-width: 34ch;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    /* contact list */
+    .contact h2 {
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin: 0 0 12px;
+    }
+    .links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1.5px solid var(--ink);
+    }
+    .links li { border-bottom: 1.5px solid var(--ink); position: relative; }
+
+    .link {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 12px;
+      text-decoration: none;
+      position: relative;
+      z-index: 0;
+      transition: color .2s ease;
+    }
+    .link::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform .22s ease;
+      z-index: -1;
+    }
+    .link:hover, .link:focus-visible { color: var(--paper); }
+    .link:hover::before, .link:focus-visible::before { transform: scaleY(1); }
+    .link:focus-visible { outline: none; }
+
+    .link svg { width: 22px; height: 22px; fill: currentColor; display: block; }
+    .link .label { display: grid; line-height: 1.3; }
+    .link .name { font-weight: 600; }
+    .link .handle { font-size: 12.5px; opacity: .8; overflow-wrap: anywhere; }
+    .link .arrow { transition: transform .22s ease; }
+    .link:hover .arrow, .link:focus-visible .arrow { transform: translate(3px, -3px); }
+
+    /* LinkedIn leads, so it gets the big row */
+    .links li.primary .link { padding: 22px 12px; }
+    .links li.primary .name {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1;
+    }
+    .links li.primary svg { width: 28px; height: 28px; }
+
+    .copy {
+      position: absolute;
+      right: 44px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      appearance: none;
+      background: var(--paper);
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      font: inherit;
+      font-size: 12px;
+      padding: 3px 10px;
+      cursor: pointer;
+    }
+    .copy:hover { background: var(--ink); color: var(--paper); border-color: var(--paper); }
+
+    .kbd {
+      font-size: 11px;
+      border: 1px solid currentColor;
+      border-radius: 4px;
+      padding: 0 5px;
+      margin-right: 8px;
+      display: none;
+    }
+    @media (hover: hover) and (min-width: 860px) {
+      .kbd { display: inline-block; }
+      .copy { right: 70px; }
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+    .hint { display: none; }
+    @media (hover: hover) and (min-width: 860px) { .hint { display: inline; } }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translate(-50%, 20px);
+      background: var(--ink);
+      color: var(--paper);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; overflow: hidden;
+      clip: rect(0 0 0 0); white-space: nowrap;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Duotone filters: map the avatar's darks to one colour and lights to the other -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="duotone-light" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values=".33 .33 .33 0 0  .33 .33 .33 0 0  .33 .33 .33 0 0  0 0 0 1 0"/>
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.110 0.957"/>
+        <feFuncG type="table" tableValues="0.169 0.937"/>
+        <feFuncB type="table" tableValues="0.910 0.894"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="duotone-dark" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values=".33 .33 .33 0 0  .33 .33 .33 0 0  .33 .33 .33 0 0  0 0 0 1 0"/>
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.957 0.110"/>
+        <feFuncG type="table" tableValues="0.937 0.169"/>
+        <feFuncB type="table" tableValues="0.894 0.910"/>
+      </feComponentTransfer>
+    </filter>
+  </svg>
+
+  <div class="page">
+    <header class="bar">
+      <span>kanushka.com</span>
+      <button class="theme-toggle" type="button" aria-label="Swap colours">
+        <span class="swatch" aria-hidden="true"></span><span>swap</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="avatar" aria-hidden="true">
+          <img src="images/kanushka-smile.png" alt="" draggable="false">
+        </div>
+        <h1>Kanushka<br><em>Gayan</em></h1>
+        <p class="role">Software Engineer</p>
+        <p class="bio">I make crispy websites and mobile apps. The fastest way to reach me is LinkedIn; everything else is below.</p>
+      </section>
+
+      <section class="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Find me</h2>
+        <ul class="links">
+          <li class="primary">
+            <a class="link" data-key="1" href="https://www.linkedin.com/in/kanushka-gayan" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+              <span class="label"><span class="name">LinkedIn</span><span class="handle">in/kanushka-gayan</span></span>
+              <span class="arrow" aria-hidden="true"><span class="kbd">1</span>↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="link" data-key="2" href="mailto:hello@kanushka.com">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h20a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2.4V18h18V6.4l-9 6.3-9-6.3zM4.2 6l7.8 5.5L19.8 6H4.2z"/></svg>
+              <span class="label"><span class="name">Email</span><span class="handle">hello@kanushka.com</span></span>
+              <span class="arrow" aria-hidden="true"><span class="kbd">2</span>↗</span>
+            </a>
+            <button class="copy" type="button" data-copy="hello@kanushka.com">copy</button>
+          </li>
+          <li>
+            <a class="link" data-key="3" href="https://github.com/kanushka" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.82-.26.82-.57v-2c-3.34.72-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.77-1.34-1.77-1.08-.74.09-.73.09-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.7.82.58A12 12 0 0 0 12 .3"/></svg>
+              <span class="label"><span class="name">GitHub</span><span class="handle">@kanushka</span></span>
+              <span class="arrow" aria-hidden="true"><span class="kbd">3</span>↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="link" data-key="4" href="https://twitter.com/KanushkaTwi" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.63 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41z"/></svg>
+              <span class="label"><span class="name">X / Twitter</span><span class="handle">@KanushkaTwi</span></span>
+              <span class="arrow" aria-hidden="true"><span class="kbd">4</span>↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="link" data-key="5" href="https://www.instagram.com/kanushkanet/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.3-1.46.72-2.13 1.38A5.9 5.9 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.38 2.13.67.66 1.34 1.08 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.9 5.9 0 0 0 2.13-1.38 5.9 5.9 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.38-2.13A5.9 5.9 0 0 0 19.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
+              <span class="label"><span class="name">Instagram</span><span class="handle">@kanushkanet</span></span>
+              <span class="arrow" aria-hidden="true"><span class="kbd">5</span>↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="link" data-key="6" href="https://www.facebook.com/kanushkanet" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.62 23.1 24 18.1 24 12.07"/></svg>
+              <span class="label"><span class="name">Facebook</span><span class="handle">kanushkanet</span></span>
+              <span class="arrow" aria-hidden="true"><span class="kbd">6</span>↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="link" data-key="7" href="kanushka_gayan_cv.pdf" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 1H5a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8l-7-7zm-1 2.4L18.6 9H13V3.4zM5 21V3h6v8h8v10H5zm2-7h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
+              <span class="label"><span class="name">CV</span><span class="handle">PDF résumé</span></span>
+              <span class="arrow" aria-hidden="true"><span class="kbd">7</span>↗</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <span>© <span id="year">2026</span> Kanushka Gayan</span>
+      <span class="hint">press 1–7 to jump · S to swap colours</span>
+    </footer>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var store = {
+        get: function () { try { return localStorage.getItem("theme"); } catch (e) { return null; } },
+        set: function (v) { try { localStorage.setItem("theme", v); } catch (e) {} }
+      };
+
+      var saved = store.get();
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      root.dataset.theme = saved || (prefersDark ? "dark" : "light");
+
+      function swap() {
+        root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+        store.set(root.dataset.theme);
+      }
+      document.querySelector(".theme-toggle").addEventListener("click", swap);
+
+      // Copy email
+      var toast = document.querySelector(".toast");
+      var toastTimer;
+      function say(msg) {
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 1600);
+      }
+      document.querySelectorAll("[data-copy]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var text = btn.dataset.copy;
+          var done = function () { btn.textContent = "copied"; say("Email copied"); setTimeout(function () { btn.textContent = "copy"; }, 1600); };
+          if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { say(text); });
+          else say(text);
+        });
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener("keydown", function (e) {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.key === "s" || e.key === "S") { swap(); return; }
+        var link = document.querySelector('.link[data-key="' + e.key + '"]');
+        if (link) link.click();
+      });
+
+      // Avatar leans toward the pointer
+      var avatar = document.querySelector(".avatar");
+      var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!still) {
+        window.addEventListener("pointermove", function (e) {
+          var r = avatar.getBoundingClientRect();
+          var dx = (e.clientX - (r.left + r.width / 2)) / window.innerWidth;
+          var dy = (e.clientY - (r.top + r.height / 2)) / window.innerHeight;
+          avatar.style.transform = "rotate(" + (dx * 14).toFixed(2) + "deg) translate(" + (dx * 10).toFixed(1) + "px," + (dy * 10).toFixed(1) + "px)";
+        });
+      }
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
