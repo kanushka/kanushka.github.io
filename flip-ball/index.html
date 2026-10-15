@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mirrorline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #000;
+      --paper: #fff;
+      --ash: #e6e6e6;   /* banner's light half */
+      --soot: #1f1f1f;  /* banner's dark half */
+      --mid: #8a8a8a;   /* secondary text */
+      --display: 'Unbounded', system-ui, sans-serif;
+      --text: 'Instrument Sans', system-ui, sans-serif;
+    }
+    html, body { margin: 0; height: 100%; background: var(--ink); overflow: hidden; }
+    canvas { display: block; width: 100vw; height: 100vh; }
+
+    /* HUD text inverts against whatever is behind it, like the ball does. */
+    .hud {
+      position: fixed;
+      color: var(--paper);
+      mix-blend-mode: difference;
+      font-family: var(--text);
+      pointer-events: none;
+      user-select: none;
+    }
+    .stat { top: 20px; display: flex; flex-direction: column; gap: 2px; }
+    .stat--flips { left: 24px; }
+    .stat--time { right: 24px; text-align: right; }
+    .stat--level { left: 50%; transform: translateX(-50%); text-align: center; align-items: center; }
+    .stat--level b { font-size: 22px; line-height: 40px; }
+    .stat b {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .stat span { font-size: 14px; }
+
+    .keys {
+      left: 24px; bottom: 20px;
+      display: flex; gap: 20px; align-items: center;
+      font-size: 14px;
+    }
+    .keys div { display: flex; gap: 6px; align-items: center; }
+    kbd {
+      font-family: var(--text);
+      font-weight: 600;
+      font-size: 12px;
+      min-width: 14px;
+      padding: 3px 7px;
+      border: 1.5px solid currentColor;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    #pause-btn svg { display: block; margin: auto; }
+    #help-btn, #pause-btn {
+      position: fixed; bottom: 18px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--paper);
+      background: transparent;
+      color: var(--paper);
+      mix-blend-mode: difference;
+      font: 700 18px var(--display);
+      cursor: pointer;
+    }
+    #help-btn { right: 24px; }
+    #pause-btn { right: 76px; }
+    #help-btn:focus-visible, #pause-btn:focus-visible, .card button:focus-visible, .banner button:focus-visible {
+      outline: 3px solid var(--mid); outline-offset: 3px;
+    }
+
+    /* Help: a card that is itself split by the line, white over black. */
+    .help {
+      position: fixed; inset: 0;
+      display: grid; place-items: center;
+      background: rgba(128, 128, 128, 0.35);
+      font-family: var(--text);
+    }
+    .help[hidden], .banner[hidden], .banner button[hidden] { display: none; }
+    .card {
+      width: min(420px, calc(100vw - 32px));
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 0 2px var(--ink);
+    }
+    .card section { padding: 24px 28px; }
+    .card .above { background: var(--paper); color: var(--ink); }
+    .card .below { background: var(--ink); color: var(--paper); }
+    .card h2 {
+      font: 700 24px/1.1 var(--display);
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+    }
+    .card p { margin: 0; font-size: 16px; line-height: 1.45; }
+    .card ul { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 10px; font-size: 15px; }
+    .card li { display: flex; gap: 12px; align-items: center; }
+    .card li kbd { min-width: 44px; }
+    .card button, .banner button {
+      font: 600 15px var(--text);
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .card button { background: var(--paper); color: var(--ink); border: 0; }
+
+    /* Level complete: a band across the screen, light half over dark half. */
+    .banner {
+      position: fixed; left: 0; right: 0; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--text);
+      animation: open 380ms cubic-bezier(.2,.8,.2,1);
+    }
+    .banner .above, .banner .below {
+      display: flex; align-items: center; justify-content: center; gap: 28px;
+      padding: 22px 24px;
+    }
+    .banner .above { background: var(--ash); color: var(--ink); }
+    .banner .below { background: var(--soot); color: var(--paper); }
+    .banner h1 {
+      font: 700 clamp(28px, 6vw, 56px)/1 var(--display);
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .banner .result { font: 400 20px var(--display); font-variant-numeric: tabular-nums; }
+    .banner .result + .result { color: var(--mid); }
+    .banner button { background: transparent; color: var(--paper); border: 1.5px solid var(--paper); }
+    .banner button.primary { background: var(--paper); color: var(--ink); }
+    .banner .actions { display: flex; gap: 12px; }
+    @keyframes open { from { clip-path: inset(50% 0 50% 0); } to { clip-path: inset(0 0 0 0); } }
+    @media (prefers-reduced-motion: reduce) { .banner { animation: none; } }
+
+    /* Title screen: the name sits on the line and is reflected below it.
+       Difference blending makes it black over white and white over black. */
+    body:not(.playing) .hud, body:not(.playing) #help-btn, body:not(.playing) #pause-btn { visibility: hidden; }
+    .title[hidden] { display: none; }
+    .title {
+      position: fixed; inset: 0;
+      color: var(--paper);
+      mix-blend-mode: difference;
+      font-family: var(--text);
+      text-align: center;
+    }
+    .title .above, .title .below {
+      position: absolute; left: 0; right: 0;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .title .above { bottom: calc(50% + 18px); gap: 18px; }
+    .title .below { top: calc(50% + 18px); gap: 36px; }
+    .title h1, .title .reflection {
+      font: 700 clamp(44px, 11vw, 132px)/0.8 var(--display);
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+    .title .reflection { transform: scaleY(-1); opacity: 0.55; }
+    .title .tagline { font-size: 17px; margin: 0; }
+    .title .actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .title button {
+      display: inline-flex; align-items: center; gap: 10px;
+      font: 600 16px var(--text);
+      padding: 10px 14px 10px 20px;
+      border-radius: 999px;
+      border: 2px solid var(--paper);
+      background: transparent;
+      color: var(--paper);
+      cursor: pointer;
+    }
+    .title button.primary { background: var(--paper); color: var(--ink); }
+    .title button.primary kbd { border-color: var(--ink); }
+    .title button:focus-visible { outline: 3px solid var(--mid); outline-offset: 3px; }
+    .title.leaving { animation: leave 420ms cubic-bezier(.6,0,.4,1) forwards; }
+    @keyframes leave { to { opacity: 0; letter-spacing: 0.2em; } }
+    @media (prefers-reduced-motion: reduce) { .title.leaving { animation-duration: 1ms; } }
+
+    @media (max-width: 560px) {
+      .stat b { font-size: 30px; }
+      .keys { gap: 12px; font-size: 12px; }
+      .banner .below { flex-wrap: wrap; gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div class="hud stat stat--flips"><b id="flips">0</b><span>flips</span></div>
+  <div class="hud stat stat--level"><b id="level-name"></b><span id="level-num"></span></div>
+  <div class="hud stat stat--time"><b id="time">0:00</b><span>time</span></div>
+  <div class="hud keys" aria-hidden="true">
+    <div><kbd>←</kbd><kbd>→</kbd> roll</div>
+    <div><kbd>Space</kbd> flip</div>
+    <div><kbd>R</kbd> restart</div>
+    <div><kbd>P</kbd> pause</div>
+  </div>
+  <button id="pause-btn" aria-controls="pause" aria-pressed="false" aria-label="Pause">
+    <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect x="1" y="1" width="4" height="14" fill="currentColor"/><rect x="9" y="1" width="4" height="14" fill="currentColor"/></svg>
+  </button>
+  <button id="help-btn" aria-controls="help" aria-expanded="false" aria-label="How to play">?</button>
+
+  <div class="title" id="title">
+    <div class="above">
+      <p class="tagline">Two worlds. One line.</p>
+      <h1>Mirrorline</h1>
+    </div>
+    <div class="below">
+      <div class="reflection" aria-hidden="true">Mirrorline</div>
+      <div class="actions">
+        <button class="primary" id="start">Play <kbd>Space</kbd></button>
+        <button id="title-help">How to play <kbd>H</kbd></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="help" id="help" hidden role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="card">
+      <section class="above">
+        <h2 id="help-title">Two worlds, one line</h2>
+        <p>Above the line you're black and fall down. Below it you're white and fall up.
+          A hill you can't climb on one side is a valley on the other.</p>
+      </section>
+      <section class="below">
+        <ul>
+          <li><kbd>← →</kbd> Roll back and forward</li>
+          <li><kbd>Space</kbd> Flip to the other side</li>
+          <li><kbd>R</kbd> Restart the level</li>
+          <li><kbd>P</kbd> Pause</li>
+          <li><kbd>H</kbd> Show this help</li>
+        </ul>
+        <p style="margin-bottom:20px">Grey rocks live in one world only. Cross the grey line to finish.</p>
+        <button id="help-close">Play</button>
+      </section>
+    </div>
+  </div>
+
+  <div class="banner" id="pause" role="dialog" aria-label="Paused" hidden>
+    <div class="above"><h1>Paused</h1></div>
+    <div class="below">
+      <div class="actions">
+        <button class="primary" id="resume">Resume</button>
+        <button id="pause-restart">Restart level</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="banner" id="done" role="status" hidden>
+    <div class="above"><h1 id="done-title">Level complete</h1></div>
+    <div class="below">
+      <span class="result" id="done-time"></span>
+      <span class="result" id="done-flips"></span>
+      <span class="result" id="done-par"></span>
+      <div class="actions">
+        <button class="primary" id="next">Next level</button>
+        <button id="replay">Play again</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
