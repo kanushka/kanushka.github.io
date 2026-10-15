@@ -14,6 +14,7 @@ const ROCK_R = 40;      // rock radius
 const FLIP_TIME = 0.42; // seconds for the flip jump
 const HOP = 1.1;        // how far (in radii) the ball hops away before diving through
 const GOAL_W = 70;      // thickness of the goal line (wider than the ball)
+const FAR_ABOVE = -5000, FAR_BELOW = WORLD_H + 5000; // fill edges past any screen
 
 // ---- Levels ---------------------------------------------------------------
 // A level is a line drawn left to right as a chain of pieces. Heights are in
@@ -331,7 +332,7 @@ function segDir(k) {
 // ---- Rendering ------------------------------------------------------------
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-let W, H, scale;
+let W, H, scale, offY;
 
 function resize() {
   const dpr = window.devicePixelRatio || 1;
@@ -339,8 +340,12 @@ function resize() {
   H = window.innerHeight;
   canvas.width = W * dpr;
   canvas.height = H * dpr;
-  scale = (H / WORLD_H) * dpr;
+  // Fit the world's height, but on narrow (portrait) screens keep at least
+  // MIN_VIEW_W of the line in view and centre the world vertically.
+  scale = Math.min(H / WORLD_H, W / MIN_VIEW_W) * dpr;
+  offY = (canvas.height - WORLD_H * scale) / 2;
 }
+const MIN_VIEW_W = 560;
 window.addEventListener('resize', resize);
 
 // Trace the line from x0 to x1, then close the shape off at y = edge.
@@ -367,10 +372,10 @@ function render() {
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.setTransform(scale, 0, 0, scale, -camX * scale, 0);
+  ctx.setTransform(scale, 0, 0, scale, -camX * scale, offY);
 
   // Black side: everything below the line.
-  traceSide(camX - 50, camX + viewW + 50, WORLD_H + 1000);
+  traceSide(camX - 50, camX + viewW + 50, FAR_BELOW);
   ctx.fillStyle = '#000';
   ctx.fill();
 
@@ -398,15 +403,15 @@ function render() {
 // and vanishes at its far edge.
 function drawGoal() {
   ctx.fillStyle = '#8a8a8a';
-  ctx.fillRect(goalEdge, -1000, GOAL_W, WORLD_H + 2000);
+  ctx.fillRect(goalEdge, FAR_ABOVE, GOAL_W, FAR_BELOW - FAR_ABOVE);
 }
 
 function drawBallInSide(cx, cy, side) {
   ctx.save();
   ctx.beginPath();
-  ctx.rect(-5000, -1000, goalEnd + 5000, WORLD_H + 2000);
+  ctx.rect(-5000, FAR_ABOVE, goalEnd + 5000, FAR_BELOW - FAR_ABOVE);
   ctx.clip();
-  traceSide(cx - R * 4, cx + R * 4, side > 0 ? -1000 : WORLD_H + 1000);
+  traceSide(cx - R * 4, cx + R * 4, side > 0 ? FAR_ABOVE : FAR_BELOW);
   ctx.clip();
   ctx.fillStyle = side > 0 ? '#000' : '#fff';
   ctx.beginPath();
@@ -490,11 +495,16 @@ function start() {
   if (title.classList.contains('leaving')) return;
   title.classList.add('leaving');
   document.body.classList.add('playing');
-  title.addEventListener('animationend', () => {
+  let begun = false;
+  const begin = () => {
+    if (begun) return;
+    begun = true;
     title.hidden = true;
     title.classList.remove('leaving');
     playLevel(loadProgress());
-  }, { once: true });
+  };
+  title.addEventListener('animationend', begin, { once: true });
+  setTimeout(begin, 600); // in case the animation never runs
 }
 
 function toggleHelp(open = hud.help.hidden) {
@@ -557,6 +567,26 @@ window.addEventListener('keyup', (e) => {
   if (e.code === 'ArrowLeft') keys.left = false;
   else if (e.code === 'ArrowRight') keys.right = false;
 });
+// Touch controls: hold the arrows to roll, tap Flip to flip.
+function holdButton(id, key) {
+  const el = $(id);
+  const set = (on) => (e) => {
+    e.preventDefault();
+    if (on && paused()) return;
+    keys[key] = on;
+    el.classList.toggle('held', on);
+  };
+  el.addEventListener('pointerdown', (e) => { el.setPointerCapture(e.pointerId); set(true)(e); });
+  for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(ev, set(false));
+}
+holdButton('touch-left', 'left');
+holdButton('touch-right', 'right');
+$('touch-flip').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  if (!paused()) flip();
+});
+$('game').addEventListener('contextmenu', (e) => e.preventDefault());
+
 // Pause when the tab is hidden.
 document.addEventListener('visibilitychange', () => { if (document.hidden) togglePause(true); });
 
