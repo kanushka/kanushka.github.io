@@ -568,23 +568,29 @@ window.addEventListener('keyup', (e) => {
   else if (e.code === 'ArrowRight') keys.right = false;
 });
 // Touch controls: hold the arrows to roll, tap Flip to flip.
+// Uses touch events (with a mouse fallback) rather than pointer events, which
+// some phone browsers don't deliver reliably to held buttons.
+function press(el, onDown, onUp = () => {}) {
+  el.addEventListener('touchstart', (e) => { e.preventDefault(); onDown(); }, { passive: false });
+  el.addEventListener('touchend', (e) => { e.preventDefault(); onUp(); }, { passive: false });
+  el.addEventListener('touchcancel', () => onUp());
+  el.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    onDown();
+    window.addEventListener('mouseup', () => onUp(), { once: true });
+  });
+}
 function holdButton(id, key) {
   const el = $(id);
-  const set = (on) => (e) => {
-    e.preventDefault();
-    if (on && paused()) return;
-    keys[key] = on;
-    el.classList.toggle('held', on);
+  const set = (on) => {
+    keys[key] = on && !paused();
+    el.classList.toggle('held', keys[key]);
   };
-  el.addEventListener('pointerdown', (e) => { el.setPointerCapture(e.pointerId); set(true)(e); });
-  for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(ev, set(false));
+  press(el, () => set(true), () => set(false));
 }
 holdButton('touch-left', 'left');
 holdButton('touch-right', 'right');
-$('touch-flip').addEventListener('pointerdown', (e) => {
-  e.preventDefault();
-  if (!paused()) flip();
-});
+press($('touch-flip'), () => { if (!paused()) flip(); });
 $('game').addEventListener('contextmenu', (e) => e.preventDefault());
 
 // Pause when the tab is hidden.
