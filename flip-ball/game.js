@@ -237,7 +237,7 @@ function reset() {
 }
 
 function flip() {
-  if (ball.won || ball.flipT < 1) return;
+  if (ball.won || ball.flipT < 1 || ball.air) return;
   ball.flipFrom = ball.side;
   ball.side = -ball.side;
   ball.flipT = 0;
@@ -263,7 +263,10 @@ function currentOffset() {
   return ball.flipFrom * d;
 }
 
-function ballCenter() { return centerAt(ball.s, R, currentOffset()); }
+function ballCenter() {
+  if (ball.air) return { x: ball.air.x, y: ball.air.y };
+  return centerAt(ball.s, R, currentOffset());
+}
 
 // ---- Physics --------------------------------------------------------------
 function step(dt) {
@@ -271,12 +274,19 @@ function step(dt) {
   if (ball.inside) return;
   ball.flipT += dt / FLIP_TIME;
   if (ball.won) {
+    if (ball.air) { ball.s = sFromX(ball.air.x); ball.air = null; }
     // Keep rolling into the goal line until it has disappeared inside.
     ball.s += Math.max(Math.abs(ball.v), 140) * dt;
     if (ballCenter().x - R >= goalEnd) ball.inside = true;
     return;
   }
   ball.time += dt;
+
+  if (ball.air) {
+    airStep(dt);
+    if (ballCenter().x + R >= goalEdge) ball.won = true;
+    return;
+  }
 
   const t = tanAt(ball.s);
   const input = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
@@ -290,6 +300,7 @@ function step(dt) {
   ball.s += ball.v * dt;
 
   hitCorners(prev, ball.s);
+  if (ball.air) return;
 
   if (ball.s < sMin) { ball.s = sMin; ball.v = 0; }
   if (ball.s > sMax) { ball.s = sMax; ball.v = 0; }
@@ -307,9 +318,16 @@ function step(dt) {
   if (ballCenter().x + R >= goalEdge) ball.won = true;
 }
 
-// Rolling into an inside corner (a wall, the foot of a ramp) costs speed:
-// the sharper the turn, the more is lost, so a 90° wall stops you dead
-// instead of letting momentum carry you up it. Outside corners are free.
+// Corners. Rolling over an outside corner (the edge of a step, a cliff, a
+// box) with some speed launches the ball into the air, so it flies off in an
+// arc instead of hugging the wall. Rolling into an inside corner (the foot
+// of a wall or ramp) costs speed: the sharper the turn, the more is lost,
+// but some always carries through (CORNER_KEEP).
+const CORNER_KEEP = 0.45;
+const LAUNCH_MIN = 40;   // slower than this, the ball just rolls over the edge
+const AIR_CONTROL = 0.3; // share of the arrow keys' push that works in the air
+const AIR_GRAVITY = 1.6; // extra pull while flying, for shorter, snappier hops
+
 function hitCorners(from, to) {
   let k = segAt(from);
   const kEnd = segAt(to);
@@ -318,9 +336,75 @@ function hitCorners(from, to) {
     const v = dir > 0 ? k + 1 : k; // the vertex being crossed
     const a = segDir(v - 1), b = segDir(v);
     const cross = a.x * b.y - a.y * b.x;
-    if (cross * ball.side * dir < 0) ball.v *= Math.max(0, a.x * b.x + a.y * b.y);
+    const turn = cross * ball.side; // > 0: outside corner for this side, either direction
+    const dot = a.x * b.x + a.y * b.y;
+    if (turn > 0 && dot < 0.97 && Math.abs(ball.v) > LAUNCH_MIN && ball.flipT >= 1) {
+      // Leave the line at the edge, moving the way you were going.
+      ball.s = P[v].s;
+      const c = centerAt(ball.s, R, ball.side);
+      ball.air = { x: c.x, y: c.y, vx: a.x * ball.v, vy: a.y * ball.v };
+      return;
+    }
+    if (turn < 0) ball.v *= Math.max(CORNER_KEEP, dot);
     k += dir;
   }
+}
+
+// Flying: gravity pulls toward the line (down above it, up below it) until
+// the ball touches the line again. On landing it keeps the part of its
+// velocity that runs along the line.
+function airStep(dt) {
+  const A = ball.air;
+  const input = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+  A.vx += input * DRIVE * AIR_CONTROL * dt;
+  A.vy += ball.side * G * AIR_GRAVITY * dt;
+  A.x += A.vx * dt;
+  A.y += A.vy * dt;
+
+  for (const rock of rocks) {
+    if (rock.side !== ball.side) continue;
+    const rc = centerAt(rock.s, ROCK_R, rock.side);
+    const dx = A.x - rc.x, dy = A.y - rc.y, d = Math.hypot(dx, dy);
+    if (d < R + ROCK_R && d > 0) {
+      A.x = rc.x + dx / d * (R + ROCK_R);
+      A.y = rc.y + dy / d * (R + ROCK_R);
+      const vn = (A.vx * dx + A.vy * dy) / d;
+      if (vn < 0) { A.vx -= 1.3 * vn * dx / d; A.vy -= 1.3 * vn * dy / d; }
+    }
+  }
+
+  // Closest point on the line near the ball, and which side the ball is on.
+  let best = null;
+  for (let k = segIndexAtX(A.x - R * 3); k < P.length - 1 && P[k].x <= A.x + R * 3; k++) {
+    const p = P[k], q = P[k + 1];
+    const dx = q.x - p.x, dy = q.y - p.y;
+    const l2 = dx * dx + dy * dy || 1;
+    const t = Math.max(0, Math.min(1, ((A.x - p.x) * dx + (A.y - p.y) * dy) / l2));
+    const cx = p.x + dx * t, cy = p.y + dy * t;
+    const d = Math.hypot(A.x - cx, A.y - cy);
+    if (!best || d < best.d) {
+      const len = Math.sqrt(l2);
+      const above = (dy * (A.x - cx) - dx * (A.y - cy)) / len; // + above the line
+      best = { d, k, t, above };
+    }
+  }
+  if (best && (best.d < R || best.above * ball.side < 0)) {
+    const p = P[best.k], q = P[best.k + 1];
+    ball.s = p.s + (q.s - p.s) * best.t;
+    const tg = tanAt(ball.s);
+    ball.v = Math.max(-MAX_V, Math.min(MAX_V, A.vx * tg.x + A.vy * tg.y));
+    ball.air = null;
+  }
+  if (A.x < P[1].x + R) { A.x = P[1].x + R; A.vx = 0; }
+}
+
+function segIndexAtX(x) {
+  let lo = 0, hi = P.length - 2;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >> 1;
+    if (P[mid].x <= x) lo = mid; else hi = mid - 1;
+  }
+  return lo;
 }
 
 function segDir(k) {
