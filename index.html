@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Primary Meta Tags -->
-    <title>Kanushka Gayan</title>
-    <meta name="title" content="Kanushka Gayan">
-    <meta name="description" content="Software engineer. I build websites and mobile apps. Find me on LinkedIn.">
+    <title>Kanushka Gayan · Software Engineer</title>
+    <meta name="description" content="Kanushka Gayan, software engineer in Sri Lanka. Maker of Sathiya, a free school timetable app, and Mirrorline, a black and white gravity game.">
+    <link rel="canonical" href="https://kanushka.com/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kanushka.com/">
     <meta property="og:title" content="Kanushka Gayan">
-    <meta property="og:description" content="Software engineer. I build websites and mobile apps. Find me on LinkedIn.">
+    <meta property="og:description" content="Kanushka Gayan, software engineer in Sri Lanka. Maker of Sathiya, a free school timetable app, and Mirrorline, a black and white gravity game.">
     <meta property="og:image" content="https://kanushka.com/images/meta-image.png">
     <meta property="og:site_name" content="Kanushka Gayan" />
     <meta property="fb:admins" content="100001052509358" />
@@ -23,7 +23,7 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kanushka.com/">
     <meta property="twitter:title" content="Kanushka Gayan">
-    <meta property="twitter:description" content="Software engineer. I build websites and mobile apps. Find me on LinkedIn.">
+    <meta property="twitter:description" content="Kanushka Gayan, software engineer in Sri Lanka. Maker of Sathiya, a free school timetable app, and Mirrorline, a black and white gravity game.">
     <meta property="twitter:image" content="https://kanushka.com/images/meta-image.png">
     <meta name="twitter:creator" content="@KanushkaTwi">
 
@@ -40,11 +40,36 @@
 
     <script data-ad-client="ca-pub-2490555087432582" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
-    <!-- Vercel Web Analytics -->
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Person",
+                "@id": "https://kanushka.com/#person",
+                "name": "Kanushka Gayan",
+                "url": "https://kanushka.com/",
+                "image": "https://kanushka.com/images/kanushka-smile.png",
+                "jobTitle": "Software Engineer",
+                "email": "mailto:hello@kanushka.com",
+                "sameAs": [
+                    "https://www.linkedin.com/in/kanushka-gayan",
+                    "https://github.com/kanushka",
+                    "https://twitter.com/KanushkaTwi",
+                    "https://www.instagram.com/kanushkanet/",
+                    "https://www.facebook.com/kanushkanet"
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://kanushka.com/#website",
+                "url": "https://kanushka.com/",
+                "name": "Kanushka Gayan",
+                "publisher": { "@id": "https://kanushka.com/#person" }
+            }
+        ]
+    }
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 
     <!-- Set theme before paint to avoid a flash -->
     <script>
@@ -272,6 +297,23 @@
         .game:hover .go { background: var(--bg); color: var(--fg); border-color: var(--bg); padding-right: 14px; }
         .game:hover .go::after { border-width: 6px 0 6px 10px; }
 
+        /* Sathiya: a timetable filling in, in the same frame as the game card */
+        .game.sathiya { margin-top: 14px; }
+        .sathiya .stage {
+            background: var(--bg);
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 4px;
+            padding: 10px 12px;
+        }
+        .sathiya .cell { border: 2px solid var(--fg); border-radius: 4px; animation: fill 6s steps(1) infinite; }
+        @keyframes fill {
+            0%, 8% { background: transparent; }
+            9%, 85% { background: var(--fg); }
+            86%, 100% { background: transparent; }
+        }
+        .sathiya .si { font-weight: 600; margin-left: 6px; }
         /* Contacts */
         .contacts h2 {
             margin: 0 0 14px;
@@ -408,6 +450,16 @@
                             <small>A black and white gravity game I made</small>
                         </span>
                         <span class="go" aria-hidden="true">Play</span>
+                    </span>
+                </a>
+                <a class="game sathiya" href="https://sathiya.kanushka.com/">
+                    <span class="stage" aria-hidden="true"><span class="cell" style="animation-delay:0.00s"></span><span class="cell" style="animation-delay:1.75s"></span><span class="cell" style="animation-delay:3.50s"></span><span class="cell" style="animation-delay:0.75s"></span><span class="cell" style="animation-delay:2.50s"></span><span class="cell" style="animation-delay:4.25s"></span><span class="cell" style="animation-delay:1.50s"></span><span class="cell" style="animation-delay:3.25s"></span><span class="cell" style="animation-delay:0.50s"></span><span class="cell" style="animation-delay:2.25s"></span><span class="cell" style="animation-delay:4.00s"></span><span class="cell" style="animation-delay:1.25s"></span><span class="cell" style="animation-delay:3.00s"></span><span class="cell" style="animation-delay:0.25s"></span><span class="cell" style="animation-delay:2.00s"></span><span class="cell" style="animation-delay:3.75s"></span><span class="cell" style="animation-delay:1.00s"></span><span class="cell" style="animation-delay:2.75s"></span></span>
+                    <span class="label">
+                        <span>
+                            <strong>Sathiya<span class="si" lang="si">සතිය</span></strong>
+                            <small>Free timetables for Sri Lankan schools</small>
+                        </span>
+                        <span class="go" aria-hidden="true">Visit</span>
                     </span>
                 </a>
             </section>
